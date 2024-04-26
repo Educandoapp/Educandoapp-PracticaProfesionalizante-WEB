@@ -19,7 +19,7 @@ Educando-ecommerce:https://github.com/aguirre-valeria/educando-ecommerce
 -	<a href="https://github.com/JuanBalza">BALZA, Juan</a>
 -	<a href="https://github.com/dario1595">DIAZ, Dario</a>
 -	<a href="https://github.com/eduscba">LUNA, Juan Eduardo</a>
--	<a href="https://github.com/robertomiranda94">Walter Roberto Miranda </a>
+-	<a href="https://github.com/robertomiranda94"> Miranda Walter Roberto </a>
 -	<a href="https://github.com/romeomoreno">MORENO, Romeo</a>
 
 <p><img align="right" src="https://github.com/Adam-pw/Adam-pw/blob/main/animation_500_kxa883sd.gif" alt="adam-pw" /></p>
