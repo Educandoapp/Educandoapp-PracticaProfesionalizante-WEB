@@ -1,0 +1,45 @@
+<div class="checkout-container">
+  <div class="bg-dark text-white container-fluid checkout-title">
+      <h2 class="container pt-4 pb-4" >Your Cart</h2>
+  </div>
+
+  <!-- empty item -->
+  <ng-container *ngIf="{quantity: quantity$ | async } as dataCart">
+    <div class="container" *ngIf="dataCart.quantity === 0">
+      <div class="pt-2 pb-3 border-bottom container">
+        <div id="empty-item" class="d-flex justify-content-center align-items-center">
+          <div class="d-flex align-items-center justify-content-start p-2 flex-column">
+            <h2 class="mb-4 mt-1">No tienes ningún curso en proceso de compra.</h2>
+            <button class="btn btn-primary fs-4 end-buy btn-rect" routerLink="/cursos">Añadir Cursos</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- checkout -->
+  <div *ngIf="{quantity: quantity$ | async, total: total$ | async, cart: cart$ | async, discount: discount} as dataCart" class="container">
+    <ng-container *ngIf="dataCart.quantity !== 0">
+      <div class="pt-2 pb-3 border-bottom container">
+        <app-checkout-card [cart]="dataCart.cart ? dataCart.cart : []"></app-checkout-card>
+        <!-- total -->
+        <div class="container d-flex align-items-center justify-content-between pt-3 mt-4 ps-2 pe-2 border-top" id="total-container">
+          <h2>Subtotal</h2>
+          <h2>$ <span id="total-cart">{{dataCart.total}}</span></h2>
+        </div>
+        <!-- final price -->
+        <div class="text-center container mt-4" id="precio-final" *ngIf="!sendContainer">
+          <p class="fs-1 fw-bold">Precio Final $ {{dataCart.total}}</p>
+
+          <div *ngIf="!isLoggedIn">
+            <button class="btn btn-primary fs-4 end-buy btn-rect" id="finalizar-compra" (click)="showLoginPopup()">Finalizar compra</button>
+          </div>
+
+          <div *ngIf="isLoggedIn" class="d-flex justify-content-center">
+            <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
+    </div>
