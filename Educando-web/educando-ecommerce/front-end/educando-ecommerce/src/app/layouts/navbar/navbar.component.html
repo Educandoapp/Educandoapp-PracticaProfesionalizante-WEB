@@ -1,0 +1,101 @@
+<!-- Inicio de la Topbar -->
+<div class="container-fluid bg-dark">
+  <div class="row py-2 px-lg-5">
+    <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+      <div class="d-inline-flex align-items-center text-white">
+        <small><i class="bi bi-telephone-fill mr-2"></i>+54 351 5646789</small>
+        <small class="px-3">|</small>
+        <small><i class="bi bi-envelope-fill mr-2"></i>info@educando.com</small>
+      </div>
+    </div>
+    <div class="col-lg-6 text-center text-lg-right">
+      <div class="d-inline-flex align-items-center">
+        <a class="text-white px-2" href="">
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a class="text-white px-2" href="">
+          <i class="bi bi-twitter"></i>
+        </a>
+        <a class="text-white px-2" href="">
+          <i class="bi bi-linkedin"></i>
+        </a>
+        <a class="text-white px-2" href="">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a class="text-white pl-2" href="">
+          <i class="bi bi-youtube"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin de la Topbar -->
+
+<!-- Navbar -->
+<div class="container-fluid p-0">
+  <nav class="navbar navbar-expand-md bg-white navbar-light py-3 py-lg-0 px-lg-5 mx-xxl-5">
+    <!-- Resto del código HTML de la barra de navegación -->
+    <div class="collapse navbar-collapse justify-content-between px-lg-3 mx-xxl-5" id="navbarCollapse">
+      <div class="navbar-nav mx-auto py-0">
+        <!-- Enlaces comunes -->
+        <ng-container *ngIf="!isAdminLoggedIn; else clientMenu">
+          <a routerLink="/" routerLinkActive="router-link-active" class="nav-item nav-link active">Inicio</a>
+          <a routerLink="/nosotros" class="nav-item nav-link">Sobre Nosotros</a>
+          <a routerLink="/cursos" class="nav-item nav-link">Cursos</a>
+          <a routerLink="/administradores" class="nav-item nav-link">Administradores</a>
+          <a routerLink="/contacto" class="nav-item nav-link">Contacto</a>
+          <div class="d-flex">
+            <a routerLink="/cursos/checkout" class="d-flex align-items-center mx-2">
+              <button type="button" class="btn position-relative p-0 mx-3 cart-button">
+                <i class="bi bi-cart4 btn-outline-primary" style="font-size: 1.75rem"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  *ngIf="{quantity: quantity$ | async } as dataCart">
+                  <ng-container *ngIf="dataCart.quantity !== 0">{{dataCart.quantity}}</ng-container>
+                </span>
+              </button>
+            </a>
+            <a class="d-flex align-items-center mx-2">
+              <button routerLink="/login" class="btn btn-primary py-2 px-4 d-lg-block btn-rect" *ngIf="!isAdminLoggedIn">Ingresar</button>
+            </a>
+          </div>
+        </ng-container>
+
+        <!-- Menú para el cliente -->
+        <ng-template #clientMenu>
+          <a routerLink="/mis-cursos" class="nav-item nav-link">Mis Cursos</a>
+          <a routerLink="/mis-certificaciones" class="nav-item nav-link">Mis Certificaciones</a>
+
+          <a routerLink="/mis-favoritos" class="nav-item nav-link">Mis Favoritos</a>
+          <a routerLink="/cursos" class="nav-item nav-link">Cursos de formación</a>
+          <a routerLink="/cursos/checkout" class="d-flex align-items-center mx-2">
+            <button type="button" class="btn position-relative p-0 mx-3 cart-button">
+              <i class="bi bi-cart4 btn-outline-primary" style="font-size: 1.75rem"></i>
+              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                *ngIf="{quantity: quantity$ | async } as dataCart">
+                <ng-container *ngIf="dataCart.quantity !== 0">{{dataCart.quantity}}</ng-container>
+              </span>
+            </button>
+          </a>
+          <div class="d-flex align-items-center">
+            <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="bi bi-emoji-sunglasses"></i>
+                {{ currentUser?.nombre }}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" routerLink="/perfil">Editar perfil</a></li>
+                <li><a class="dropdown-item">Configuraciones</a></li>
+                <li><a class="dropdown-item" routerLink="/" (click)="logout()">Cerrar sesión</a></li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Botón de inicio de sesión -->
+
+    </div>
+  </nav>
+</div>
+<!-- Navbar -->

@@ -1,0 +1,21 @@
+#empty-item{
+    min-height: 60vh !important;
+}
+.checkout-title{
+    margin-top: 54px !important;
+}
+.checkout-container{
+    margin: 0 auto !important;
+}
+
+.confirmation {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.btn-rect {
+  border-radius: 0;
+}
