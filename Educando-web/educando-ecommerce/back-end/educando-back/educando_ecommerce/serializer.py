@@ -1,6 +1,6 @@
 from  rest_framework import serializers
 
-from .models import Rol, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
+from .models import Rol, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, ForoRespuesta
 
 class RolSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -10,15 +10,17 @@ class RolSerializer(serializers.ModelSerializer):
 #===========================================================================================================================================================================
 class UsuarioSerializer(serializers.Serializer):
     # Se definen los campos del serializer
+    id_usuario =serializers.CharField(required=False)
     nombre = serializers.CharField(required=True)
     apellido = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
     id_rol_id = serializers.IntegerField(required=True)
+    urlImagen = serializers.CharField(required = False)
 
     class Meta:
         model = Usuario
-        fields = ['nombre', 'apellido', 'email', 'password','id_rol_id']
+        fields = ['id_usuario','nombre', 'apellido', 'email', 'password', 'urlImagen', 'id_rol_id']
         extra_kwargs = {'password': {'write_only': True}}
         #El campo password tiene la configuración adicional write_only=True, lo que significa que solo se utilizará para la creación de un nuevo usuario y no se incluirá en las respuestas de serialización
 
@@ -62,10 +64,15 @@ class CarritoSerializer(serializers.ModelSerializer):
         model = Carrito
         fields = '__all__'
 
-class ForoSerializer(serializers.ModelSerializer):   
+class ForoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Foro
-        fields = '__all__'
+        fields = ['id_foro', 'id_usuarios', 'id_rol', 'nombre', 'titulo', 'mensaje', 'id_foro_respuesta', 'fecha']
+
+class ForoRespuestaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ForoRespuesta
+        fields = ['id_foro_respuesta','nombre', 'mensaje', 'id_foro', 'id_usuario','fecha']
 
 class ContactoSerializer(serializers.ModelSerializer):  
     class Meta:

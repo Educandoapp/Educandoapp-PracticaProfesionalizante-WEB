@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os, dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,14 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', default='OJBk1Y>T-*n`T6q')
+SECRET_KEY = 'nueva_clave_secreta_para_jwt'
 
 CSRF_COOKIE_SECURE = False
 
 CSRF_COOKIE_HTTPONLY = False
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = 'True'
+#DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
@@ -65,7 +66,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-ROOT_URLCONF = 'educando.urls'
+ROOT_URLCONF = 'educando_back.urls'
 
 TEMPLATES = [
     {
@@ -83,23 +84,22 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'educando.wsgi.application'
+WSGI_APPLICATION = 'educando_back.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default':  dj_database_url.config ()
+    'default':  
 
-       #{ 
-        #'ENGINE': 'django.db.backends.mysql',
-        #'NAME': 'educando',
-        #'USER': 'admin',
-        #'PASSWORD':'32034685a',
-        #'HOST': 'educando.cirdv7yvfitg.us-east-2.rds.amazonaws.com',
-        #'PORT': 3306,
-       #}
+       { 
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'educando',
+        'USER': 'root',
+        'PASSWORD':'xncrw1zf',
+        'HOST': 'localhost',
+       }
 }
 
 # Password validation
@@ -157,5 +157,10 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-AUTH_USER_MODEL = 'educando_eco.Usuario'
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
+]
 
+CORS_ALLOW_CREDENTIALS = True
+
+AUTH_USER_MODEL = 'educando_ecommerce.Usuario'
