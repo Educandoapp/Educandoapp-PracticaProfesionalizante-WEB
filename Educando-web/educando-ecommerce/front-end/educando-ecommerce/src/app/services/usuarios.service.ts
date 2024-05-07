@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Usuario } from '../interfaces/usuario.interface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Usuario } from '../interfaces/usuario.interface';
 export class UsuariosService {
 
   // URL de la API
-  private apiUrl = 'https://educando-test.onrender.com/';
+  private apiUrl =  environment.apiUrl;
 
   constructor(
     private http: HttpClient

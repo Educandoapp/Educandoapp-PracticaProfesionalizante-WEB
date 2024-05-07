@@ -20,7 +20,7 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    path('', include('educando_eco.urls')),
+    path('', include('educando_ecommerce.urls')),
     path('docs/', include_docs_urls(title='Educando')),
     path('admin/', admin.site.urls),
 ]

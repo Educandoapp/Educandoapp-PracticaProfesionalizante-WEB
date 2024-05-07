@@ -1,5 +1,5 @@
-from .serializer import  UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer
-from .models import  Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
+from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer
+from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
 
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny
@@ -11,6 +11,8 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
 
 import datetime, jwt
 from django.contrib.auth.models import Group
@@ -34,7 +36,6 @@ class UsuarioView(viewsets.ViewSet):
 
             # Crear un nuevo usuario
             usuario = Usuario.objects.create_user(email=email, password=password, nombre=nombre, apellido=apellido, id_rol_id=id_rol_id)
-
             # Obtener el objeto de grupo correspondiente al id_rol
             grupo = Group.objects.get(pk=id_rol_id)
 
@@ -81,6 +82,7 @@ class UsuarioView(viewsets.ViewSet):
                         'nombre': usuario.nombre,
                         'apellido': usuario.apellido,
                         'id_rol_id': usuario.id_rol_id,
+                        'urlImagen' : usuario.urlImagen,
                         'exp': expiration_timestamp
                     }
                     token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
@@ -107,11 +109,53 @@ class UsuarioView(viewsets.ViewSet):
     
 #===========================================================================================================================================================================    
 
+class ObtenerUsuarioView(APIView):
+    def verificar_token(self, token):
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            usuario_id = payload.get('id_usuario')
+            return usuario_id
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token expirado')
+        except jwt.InvalidTokenError:
+            raise AuthenticationFailed('Token inválido')
 
+    def post(self, request):
+        # Obtén el token del usuario desde el cuerpo de la solicitud
+        token = request.data.get('token')        
+        
+        # Verifica el token
+        usuario_id = self.verificar_token(token)
+        if usuario_id is None:
+            return Response({'mensaje': 'Token inválido'}, status=401)
+        
+        # El token es válido, obtén el usuario autenticado
+        usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
+        
+        # Serializa el usuario obtenido
+        serializer = UsuarioSerializer(usuario)
+        
+        # Devuelve el usuario serializado
+        return Response(serializer.data, status=200)
+    
 class CategoriaViewSet(viewsets.ModelViewSet):   
     queryset = Categoria.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = CategoriaSerializer  
+
+class PorCategoriaViewSet(viewsets.ViewSet):   
+    permission_classes = [permissions.AllowAny]
+    
+    def list(self, request):
+        categorias = Categoria.objects.all()
+        serializer = CategoriaSerializer(categorias, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        categoria = Categoria.objects.get(pk=pk)
+        cursos = Curso.objects.filter(id_categoria=categoria)
+        serializer = CursoSerializer(cursos, many=True)
+        return Response(serializer.data)
 
 class CursoViewSet(viewsets.ModelViewSet):  
     queryset = Curso.objects.all()
@@ -209,10 +253,86 @@ class CarritoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = CarritoSerializer
 
-class ForoViewSet(viewsets.ModelViewSet):   
+class ForoViewSet(viewsets.ModelViewSet):
     queryset = Foro.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = ForoSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)  # Crear un serializador con los datos de la solicitud
+        serializer.is_valid(raise_exception=True)  # Verificar si los datos son válidos
+        serializer.save()  # Guardar el nuevo objeto Foro sin asignar el usuario actual
+        headers = self.get_success_headers(serializer.data)  # Obtener las cabeceras de éxito
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)  # Devolver los datos serializados del objeto creado
+
+
+
+    def list(self, request, *args, **kwargs):
+        mensaje_id = request.query_params.get('mensaje_id')
+        if mensaje_id:
+            queryset = self.queryset.filter(id_foro_id=mensaje_id)
+        else:
+            queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        queryset = self.get_queryset()
+        mensaje = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(mensaje)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    @csrf_exempt 
+    def destroy(self, request, pk=None, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+ 
+class ForoRespuestaViewSet(viewsets.ModelViewSet):
+    queryset = ForoRespuesta.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = ForoRespuestaSerializer
+
+    def create(self, request, *args, **kwargs):
+        mensaje_id = request.data.get('id_foro')  # Corregir aquí para obtener el ID del mensaje
+        mensaje = get_object_or_404(Foro, pk=mensaje_id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(id_foro=mensaje)  # Aquí también, ajustar para asignar el mensaje al campo id_foro
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        queryset = self.get_queryset()
+        respuesta = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(respuesta)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    @csrf_exempt   
+    def destroy(self, request, pk=None):
+        respuesta = self.get_object()
+        respuesta.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ContactoViewSet(viewsets.ModelViewSet):   
     queryset = Contacto.objects.all()

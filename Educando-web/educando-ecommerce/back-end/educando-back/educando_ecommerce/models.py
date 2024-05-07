@@ -31,9 +31,9 @@ class UserManager(BaseUserManager): #BaseUserManager proporciona un método llam
         user.save()
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, password, id_rol_id = 1):
 
-        user = self.create_user(email=email, password=password)
+        user = self.create_user(email=email, password=password, id_rol_id=id_rol_id)
         user.is_staff = True
         user.is_superuser = True
         user.save()
@@ -48,8 +48,10 @@ class Usuario(AbstractBaseUser,PermissionsMixin):
     password = models.CharField(max_length=100, null=True)
     fecha_alta_usuario = models.DateTimeField(null=True, auto_now_add=True)
     fecha_baja_usuario = models.DateTimeField(null=True, default=None, blank=True)
+    last_login = models.DateTimeField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    urlImagen = models.CharField(max_length= 2000, null=True)
 
     # Configura el administrador de usuarios personalizado
     objects = UserManager()
@@ -127,15 +129,35 @@ class Foro(models.Model):
     id_foro = models.AutoField(primary_key=True)
     id_usuarios = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     id_rol = models.ForeignKey(Rol, on_delete=models.CASCADE, null=True, related_name='foro_rol')
-    nombre = models.CharField(max_length=80, null=True)
-    mensaje = models.CharField(max_length=500, null=True)
+    titulo = models.CharField(max_length=500, null=True)
+    nombre = models.CharField(max_length=200, null=True)
+    mensaje = models.CharField(max_length=2000, null=True)
+    id_foro_respuesta = models.ForeignKey('ForoRespuesta', on_delete=models.SET_NULL, null=True)
+    fecha = models.DateTimeField(auto_now_add=True)  # Nueva columna 'fecha'
+
     class Meta:
         db_table = 'foro'
         verbose_name = 'Foro de consulta'
         verbose_name_plural = 'Foros de consultas'
-    
-    def __str__(self) :
+
+    def __str__(self):
         return str(self.id_foro)
+
+class ForoRespuesta(models.Model):
+    id_foro_respuesta = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=200, null=True)
+    mensaje = models.CharField(max_length=2000, null=True)
+    id_foro = models.ForeignKey(Foro, on_delete=models.CASCADE, related_name='respuestas_foro')
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+    fecha = models.DateTimeField(auto_now_add=True) 
+
+    class Meta:
+        db_table = 'foro_respuesta'
+        verbose_name = 'Respuesta de Foro'
+        verbose_name_plural = 'Respuestas de Foro'
+
+    def __str__(self):
+        return str(self.id_foro_respuesta)
 
 class Contacto(models.Model):
     id_contacto = models.AutoField(primary_key=True,default=None)  

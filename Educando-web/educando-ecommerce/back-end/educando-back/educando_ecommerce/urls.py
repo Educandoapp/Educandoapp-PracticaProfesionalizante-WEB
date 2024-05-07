@@ -4,11 +4,11 @@ from educando_ecommerce import views
 
 # Definición del enrutador
 router = routers.DefaultRouter()
-router.register(r'Categoria', views.CategoriaViewSet, basename='categoria')
-router.register(r'Curso', views.CursoViewSet, basename='curso')
-router.register(r'Carrito', views.CarritoViewSet, basename='carrito')
-router.register(r'Foro', views.ForoViewSet, basename='foro')
-router.register(r'Contacto', views.ContactoViewSet, basename='contacto')
+router.register(r'categoria', views.CategoriaViewSet, basename='categoria')
+router.register(r'curso', views.CursoViewSet, basename='curso')
+router.register(r'carrito', views.CarritoViewSet, basename='carrito')
+router.register(r'foro', views.ForoViewSet, basename='foro')
+router.register(r'contacto', views.ContactoViewSet, basename='contacto')
 
 # URLs de la aplicación
 urlpatterns = [
@@ -16,17 +16,37 @@ urlpatterns = [
     path('', include(router.urls)),
     
     # URL para la vista de inicio de sesión
-    path('Login/', views.UsuarioView.as_view({'post': 'inicio_sesion'}), name='login'),
+    path('login/', views.UsuarioView.as_view({'post': 'inicio_sesion'}), name='login'),
     
     # URL para la vista de creación de usuario
-    path('Registro/', views.UsuarioView.as_view({'post': 'create_user'}), name='crear_usuario'),
+    path('registro/', views.UsuarioView.as_view({'post': 'create_user'}), name='crear_usuario'),
     
     # URL para la vista de lista de usuarios
-    path('Usuarios/', views.UsuarioView.as_view({'get': 'list_users'}), name='lista_usuarios'),
+    path('usuarios/', views.UsuarioView.as_view({'get': 'list_users'}), name='lista_usuarios'),
     
     # URL para la vista de mis cursos
-    path('Mis_cursos/', views.MisCursosView.as_view(), name='mis_cursos'),
+    path('mis_cursos/', views.MisCursosView.as_view(), name='mis_cursos'),
     
     # URL para la vista de adquirir curso
-    path('Adquirir_curso/', views.AdquirirCursoView.as_view(), name='adquirir_curso'),
+    path('adquirir_curso/', views.AdquirirCursoView.as_view(), name='adquirir_curso'),
+
+    # URL para la vista de cursos por categoría
+    path('cursos_por_categoria/<int:pk>/', views.PorCategoriaViewSet.as_view({'get': 'retrieve'}), name='cursos_por_categoria'),  
+
+    # URL para la vista de foro
+    path('foro/', views.ForoViewSet.as_view({'get': 'list', 'post': 'create'}), name='foro'),
+
+    # URL para la vista de foro borrado
+    path('foro/<int:pk>/', views.ForoViewSet.as_view({'delete': 'destroy'}), name='foro-delete'),
+    
+    # URL para la vista de foro-respuestas
+    path('foro-respuestas/', views.ForoRespuestaViewSet.as_view({'get': 'list', 'post': 'create'}), name='foro-respuestas'),
+
+    # URL para la vista de detalle de una respuesta específica del foro
+    path('foro-respuestas/<int:pk>/', views.ForoRespuestaViewSet.as_view({'get': 'retrieve'}), name='foro-respuesta-detail'),
+
+    # URL para la vista para eliminar una respuesta específica del foro
+    path('foro-respuestas/<int:pk>/eliminar/', views.ForoRespuestaViewSet.as_view({'delete': 'destroy'}), name='eliminar-respuesta-foro'),
+
+    path('obtener-usuario/', views.ObtenerUsuarioView.as_view(), name='obtener_usuario'),
 ]
