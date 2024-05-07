@@ -10,7 +10,7 @@ import { InicioComponent } from './inicio/inicio.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-
+import { ForoComponent } from './foro/foro.component';
 
 
 @NgModule({
@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
     InicioComponent,
     LoginComponent,
     RegistroComponent,
+    ForoComponent,
     NosotrosComponent
   ],
   imports: [

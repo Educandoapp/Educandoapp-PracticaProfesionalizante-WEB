@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../interfaces/usuario.interface';
-import { Observable, Subject, tap, of, catchError } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import * as CryptoJS from 'crypto-js';
+import { environment } from 'src/environments/environment';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,7 @@ import * as CryptoJS from 'crypto-js';
 export class AuthService {
 
   // URL de la API
-  private apiUrl = 'https://educando-test.onrender.com/';
+  private apiUrl = environment.apiUrl;
 
   // Variable para verificar si un administrador ha iniciado sesión
   public isAdminLoggedIn: boolean = false;

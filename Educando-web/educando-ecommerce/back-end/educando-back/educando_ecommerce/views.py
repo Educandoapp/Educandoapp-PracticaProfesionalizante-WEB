@@ -36,7 +36,6 @@ class UsuarioView(viewsets.ViewSet):
 
             # Crear un nuevo usuario
             usuario = Usuario.objects.create_user(email=email, password=password, nombre=nombre, apellido=apellido, id_rol_id=id_rol_id)
-
             # Obtener el objeto de grupo correspondiente al id_rol
             grupo = Group.objects.get(pk=id_rol_id)
 

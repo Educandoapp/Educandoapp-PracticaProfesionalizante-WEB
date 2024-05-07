@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Curso } from '../interfaces/cursos.interface';
 import { HttpClient } from '@angular/common/http';
 import { Categoria } from '../interfaces/categoria.interface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { Categoria } from '../interfaces/categoria.interface';
 export class CursosService {
 
   // URL de la API para obtener cursos
-  private apiUrl = "https://educando-test.onrender.com/";
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http:HttpClient

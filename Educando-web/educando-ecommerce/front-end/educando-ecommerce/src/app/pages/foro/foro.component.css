@@ -1,0 +1,287 @@
+.foro-container {
+    margin: 20px;
+  }
+  
+  .foro-titulo {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .agregar-tema-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .agregar-tema-container input {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+  }
+  
+  .agregar-tema-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .agregar-tema-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .agregar-tema-btn:focus {
+    outline: none;
+  }
+  
+  .mensaje {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex; /* Utilizar flexbox */
+    flex-direction: column;
+  }
+  
+  .mensaje-header {
+    margin-bottom: 5px;
+  }
+  
+  .mensaje-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .usuario-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .usuario {
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+  }
+  
+  .mensaje-contenido {
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    padding-top: 5px;
+    }
+  
+    .fecha-mensaje {
+      margin-top: 5px;
+      margin-left: 0;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  
+  .respuesta {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.05); /* Color de fondo gris con transparencia */
+  }
+  
+  .responder-container {
+    margin-top: 10px;
+    text-align: right;
+  }
+  
+  .responder-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .responder-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .responder-btn:focus {
+    outline: none;
+  }
+  
+  .area-respuesta {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  
+  .textarea-respuesta {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+  }
+  
+  .enviar-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    align-self: flex-end;
+    margin-top: 10px;
+  }
+  
+  .enviar-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .enviar-btn:focus {
+    outline: none;
+  }
+  
+  .respuestas-container h6 {
+    font-size: 1rem; /* Smaller font size */
+    font-weight: bold !important; /* Lighter font weight */
+    color:#007bff; /* Gray color */
+    margin: 0; /* Remove default margin */
+    padding: 5px 0; /* Add top and bottom padding */
+    text-align: center;
+  }
+  
+  .eliminar-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 10px; /* Agrega margen inferior */
+  }
+  
+  /* Estilo para el botón de eliminar al pasar el cursor sobre él */
+  .eliminar-btn:hover {
+    background-color: darkred;
+  }
+  
+  .formulario-container {
+    margin-bottom: 10px;
+  }
+  
+  .formulario {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .formulario input[type="text"],
+  .formulario textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .formulario .enviar-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .formulario .enviar-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .formulario .cancelar-btn:hover {
+    background-color: darkred;
+  }
+  
+  .mensaje {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilo para el botón de cancelar en el formulario */
+  .cancelar-btn {
+    background-color: #ccc; /* Cambia el color del botón Cancelar */
+    color: #000; /* Cambia el color del texto del botón Cancelar */
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    align-self: flex-end;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  /* Estilo para el botón de borrar respuesta */
+  .eliminar-btn,
+  .borrar-respuesta-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  /* Estilo para el botón de borrar respuesta al pasar el cursor sobre él */
+  .eliminar-btn:hover,
+  .borrar-respuesta-btn:hover {
+    background-color: darkred;
+  }
+  
+  /* Alineación del botón de cancelar al lado del botón de enviar en el formulario */
+  .formulario-botones {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .cancelar-btn,
+  .borrar-respuesta-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 20px;
+  }
+  
+  /* Estilo para el botón de borrar respuesta al pasar el cursor sobre él */
+  .cancelar-btn:hover,
+  .borrar-respuesta-btn:hover {
+    background-color: darkred;
+  }
+  
+  .cancelar-container {
+    display: inline-block;
+  }
+  
+  .respuesta-botones {
+    display: flex;
+    justify-content: flex-end; /* Alinear los botones al extremo derecho */
+    margin-top: 10px;
+  }
