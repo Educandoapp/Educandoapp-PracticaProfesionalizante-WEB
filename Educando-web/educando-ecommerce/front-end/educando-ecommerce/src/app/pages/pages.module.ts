@@ -11,7 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ForoComponent } from './foro/foro.component';
-
+import { TareasComponent } from './tareas/tareas.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { ForoComponent } from './foro/foro.component';
     LoginComponent,
     RegistroComponent,
     ForoComponent,
-    NosotrosComponent
+    NosotrosComponent,
+    TareasComponent
   ],
   imports: [
     CommonModule,

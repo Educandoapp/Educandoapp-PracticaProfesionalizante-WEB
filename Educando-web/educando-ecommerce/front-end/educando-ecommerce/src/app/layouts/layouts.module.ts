@@ -5,13 +5,15 @@ import { HeaderComponent } from './header/header.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
+import { AreaPersonalComponent } from './area-personal/area-personal.component';
 
 
 @NgModule({
   declarations: [
     FooterComponent,
     HeaderComponent,
-    NavbarComponent
+    NavbarComponent,
+    AreaPersonalComponent
   ],
   imports: [
     CommonModule,

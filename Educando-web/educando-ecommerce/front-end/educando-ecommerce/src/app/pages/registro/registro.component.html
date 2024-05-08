@@ -76,7 +76,7 @@
               <label class="text-uppercase fw-bold" for="rol_profesor">Profesor</label>
             </div>
             <div>
-              <input class="mx-2" type="radio" id="rol_estudiante" name="id_rol_id" value="1" formControlName="id_rol_id">
+              <input class="mx-2" type="radio" id="rol_estudiante" name="id_rol_id" value="3" formControlName="id_rol_id">
               <label class="text-uppercase fw-bold" for="rol_estudiante">Estudiante</label>
             </div>
 
@@ -95,12 +95,10 @@
           <button type="submit" [disabled]="registroForm.invalid" id="btnRegister" class="btn btn-primary py-2 px-4 d-lg-block btn-block btn-rect" >Regístrate</button>
 
           <div class="divider d-flex align-items-center my-4">
-            <p class="text-center fw-bold mx-3 mb-0 text-muted text-center">O</p>
+            
           </div>
 
-          <!-- Iniciar sesión -->
-          <a class="btn btn-primary py-2 px-4 d-lg-block btn-block btn-rect" routerLink="/login"
-            role="button">Inicia sesión</a>
+         
         </form>
       </div>
     </div>

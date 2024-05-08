@@ -60,22 +60,26 @@
           </div>
         </ng-container>
 
-        <!-- Menú para el cliente -->
-        <ng-template #clientMenu>
-          <a routerLink="/mis-cursos" class="nav-item nav-link">Mis Cursos</a>
-          <a routerLink="/mis-certificaciones" class="nav-item nav-link">Mis Certificaciones</a>
-
-          <a routerLink="/mis-favoritos" class="nav-item nav-link">Mis Favoritos</a>
-          <a routerLink="/cursos" class="nav-item nav-link">Cursos de formación</a>
-          <a routerLink="/cursos/checkout" class="d-flex align-items-center mx-2">
-            <button type="button" class="btn position-relative p-0 mx-3 cart-button">
-              <i class="bi bi-cart4 btn-outline-primary" style="font-size: 1.75rem"></i>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                *ngIf="{quantity: quantity$ | async } as dataCart">
-                <ng-container *ngIf="dataCart.quantity !== 0">{{dataCart.quantity}}</ng-container>
-              </span>
-            </button>
-          </a>
+          <!-- Menú para el cliente -->
+          <ng-template #clientMenu>
+            <a routerLink="/Inicio" class="nav-item nav-link">inicio</a>
+            <a routerLink="/mis-cursos" class="nav-item nav-link">Mis Cursos</a>
+            <a routerLink="/mis-certificaciones" class="nav-item nav-link">Mis Certificaciones</a>
+  
+            <a routerLink="/mis-favoritos" class="nav-item nav-link">Mis Favoritos</a>
+            <a routerLink="/cursos" class="nav-item nav-link">Cursos de formación</a>
+            <a routerLink="/area-personal" class="nav-item nav-link">Área Personal</a>
+   <!-- Modifica el enlace para que apunte a la ruta correcta -->
+            
+            <a routerLink="/cursos/checkout" class="d-flex align-items-center mx-2">
+              <button type="button" class="btn position-relative p-0 mx-3 cart-button">
+                <i class="bi bi-cart4 btn-outline-primary" style="font-size: 1.75rem"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                  *ngIf="{quantity: quantity$ | async } as dataCart">
+                  <ng-container *ngIf="dataCart.quantity !== 0">{{dataCart.quantity}}</ng-container>
+                </span>
+              </button>
+            </a>
           <div class="d-flex align-items-center">
             <div class="dropdown">
               <button class="btn btn-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown"
@@ -85,7 +89,6 @@
               </button>
               <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" routerLink="/perfil">Editar perfil</a></li>
-                <li><a class="dropdown-item">Configuraciones</a></li>
                 <li><a class="dropdown-item" routerLink="/" (click)="logout()">Cerrar sesión</a></li>
               </ul>
             </div>

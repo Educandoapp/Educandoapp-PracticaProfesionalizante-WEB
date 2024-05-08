@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="recordatoriosApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordatorios de Estudiante</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">¡Organiza tu tiempo y estudios!</h1>
+        <p class="lead white-text">Aquí podrás programar tus tareas y organizar tus estudios. Nuestra plataforma te mantendrá informado sobre tus pendientes para que puedas administrar tu tiempo de manera efectiva.</p>
+        <hr class="my-4">
+        <p class="white-text">¡No pierdas más tiempo!  Aprovechá al máximo tus actividades diarias.</p>
+    </div>
+</div>
+
+<body>
+    <div class="container">
+        <h2>Crear Recordatorio</h2>
+        <form>
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" class="form-control" id="titulo" [(ngModel)]="nuevoRecordatorio.titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea class="form-control" id="descripcion" rows="3" [(ngModel)]="nuevoRecordatorio.descripcion" name="descripcion" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" class="form-control" id="fecha" [(ngModel)]="nuevoRecordatorio.fecha" name="fecha" required>
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora:</label>
+                <input type="time" class="form-control" id="hora" [(ngModel)]="nuevoRecordatorio.hora" name="hora" required>
+            </div>
+            <button type="button" class="btn btn-primary" (click)="crearRecordatorio()">Crear</button>
+        </form>
+        <hr>
+        <h2>Recordatorios</h2>
+        <ul class="list-group" *ngIf="recordatorios.length > 0">
+            <li class="list-group-item" *ngFor="let recordatorio of recordatorios; let i = index">
+                <h5>{{ recordatorio.titulo }}</h5>
+                <p>{{ recordatorio.descripcion }}</p>
+                <p>Fecha: {{ recordatorio.fecha }}</p>
+                <p>Hora: {{ recordatorio.hora }}</p>
+                <button type="button" class="btn btn-primary btn-sm" (click)="editarRecordatorio(recordatorio)">Editar</button>
+                <button type="button" class="btn btn-danger btn-sm" (click)="eliminarRecordatorio(i)">Eliminar</button>
+            </li>
+        </ul>
+        <div *ngIf="recordatorios.length === 0">No hay recordatorios</div>
+    </div>
+
+    <div *ngIf="editando" class="editar-container">
+        <h2>Editar Recordatorio</h2>
+        <form>
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" class="form-control" id="titulo" [(ngModel)]="nuevoRecordatorio.titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea class="form-control" id="descripcion" rows="3" [(ngModel)]="nuevoRecordatorio.descripcion" name="descripcion" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" class="form-control" id="fecha" [(ngModel)]="nuevoRecordatorio.fecha" name="fecha" required>
+            </div>
+            <div class="form-group">
+                <label for="hora">Hora:</label>
+                <input type="time" class="form-control" id="hora" [(ngModel)]="nuevoRecordatorio.hora" name="hora" required>
+            </div>
+            <button type="button" class="btn btn-success" (click)="guardarCambios()">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('recordatoriosApp', []);
+        app.controller('TareasComponent', function($scope) {
+            $scope.nuevoRecordatorio = {};
+            $scope.recordatorios = JSON.parse(localStorage.getItem('recordatorios')) || [];
+            $scope.editando = false;
+            $scope.recordatorioEditando = null;
+
+            $scope.crearRecordatorio = function() {
+                if ($scope.nuevoRecordatorio.titulo.trim() !== '' && $scope.nuevoRecordatorio.descripcion.trim() !== '' &&
+                    $scope.nuevoRecordatorio.fecha.trim() !== '' && $scope.nuevoRecordatorio.hora.trim() !== '') {
+                    const nuevoRecordatorio = {
+                        titulo: $scope.nuevoRecordatorio.titulo,
+                        descripcion: $scope.nuevoRecordatorio.descripcion,
+                        fecha: $scope.nuevoRecordatorio.fecha,
+                        hora: $scope.nuevoRecordatorio.hora
+                    };
+                    $scope.recordatorios.push(angular.copy(nuevoRecordatorio));
+                    localStorage.setItem('recordatorios', JSON.stringify($scope.recordatorios));
+                    $scope.nuevoRecordatorio = { titulo: '', descripcion: '', fecha: '', hora: '' };
+                }
+            };
+
+            $scope.eliminarRecordatorio = function(index) {
+                $scope.recordatorios.splice(index, 1);
+                localStorage.setItem('recordatorios', JSON.stringify($scope.recordatorios));
+            };
+
+            $scope.editarRecordatorio = function(recordatorio) {
+                $scope.nuevoRecordatorio = {
+                    titulo: recordatorio.titulo,
+                    descripcion: recordatorio.descripcion,
+                    fecha: recordatorio.fecha,
+                    hora: recordatorio.hora
+                };
+                $scope.recordatorioEditando = recordatorio;
+                $scope.editando = true;
+            };
+
+            $scope.guardarCambios = function() {
+                const index = $scope.recordatorios.indexOf($scope.recordatorioEditando);
+                if (index !== -1) {
+                    $scope.recordatorios[index] = {
+                        titulo: $scope.nuevoRecordatorio.titulo,
+                        descripcion: $scope.nuevoRecordatorio.descripcion,
+                        fecha: $scope.nuevoRecordatorio.fecha,
+                        hora: $scope.nuevoRecordatorio.hora
+                    };
+                    localStorage.setItem('recordatorios', JSON.stringify($scope.recordatorios));
+                    $scope.nuevoRecordatorio = { titulo: '', descripcion: '', fecha: '', hora: '' };
+                    $scope.recordatorioEditando = null;
+                    $scope.editando = false;
+                }
+            };
+
+            $scope.cancelarEdicion = function() {
+                $scope.nuevoRecordatorio = { titulo: '', descripcion: '', fecha: '', hora: '' };
+                $scope.recordatorioEditando = null;
+                $scope.editando = false;
+            };
+        });
+    </script>
+</body>
+</html>
