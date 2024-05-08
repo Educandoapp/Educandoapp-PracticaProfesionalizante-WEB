@@ -10,6 +10,8 @@ import { CursosComponent } from './ecommerce/cursos/cursos.component';
 import { CheckoutComponent } from './ecommerce/checkout/checkout.component';
 import { DetailsComponent } from './ecommerce/cursos-container/details/details.component';
 import { ForoComponent } from './pages/foro/foro.component';
+import { TareasComponent } from './pages/tareas/tareas.component';
+import {AreaPersonalComponent} from './layouts/area-personal/area-personal.component';
 
 const routes: Routes = [
   {path: '*', redirectTo: '', pathMatch: 'full'},
@@ -24,6 +26,8 @@ const routes: Routes = [
     { path: 'cursos/details/:idCategoria/:idCurso', component: DetailsComponent },
     { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
     { path: 'foro', component: ForoComponent }, // Agrega la ruta para el componente de foro
+    { path: 'area-personal', component: AreaPersonalComponent },
+    {path: 'tareas', component: TareasComponent},
 ];
 
 @NgModule({

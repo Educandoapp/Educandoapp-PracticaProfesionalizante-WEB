@@ -30,7 +30,7 @@ export class CursosService {
 
   // Obtiene los cursos por categoría
   public getCursosPorCategoria(idCategoria: number): Observable<Curso> {
-    return this.http.get<Curso>(`${this.apiUrl}por_categoria/${idCategoria}/`);
+    return this.http.get<Curso>(`${this.apiUrl}cursos_por_categoria/${idCategoria}/`);
   }
 
   // Realiza la adquisición de cursos para cliente logueado

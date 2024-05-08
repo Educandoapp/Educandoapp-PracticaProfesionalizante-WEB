@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Personal - Cursos Online</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Agregar estilo personalizado para el menú lateral */
+        .side-menu {
+            position: fixed; /* Fijar el menú lateral */
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 250px; /* Ancho del menú */
+            background-color: #f8f9fa; /* Color de fondo */
+            padding-top: 56px; /* Altura de la barra de navegación */
+            overflow-y: auto; /* Habilitar desplazamiento vertical */
+        }
+        /* Estilo para el contenido principal */
+        .main-content {
+            margin-left: 250px; /* Dejar espacio para el menú lateral */
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top"> <!-- Ajustar la barra de navegación -->
+        <a class="navbar-brand" href="#">Educando</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Área Personal</a>
+               
+            </ul>
+        </div>
+    </nav>
+    <!-- Menú lateral -->
+    <div class="side-menu">
+        <div class="card">
+            <div class="card-header">
+                <h5>Menú</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+             
+                <li class="list-group-item"><a routerLink="../contacto">Comunícate con nosotros</a></li>
+                <li class="list-group-item"><a routerLink="../foro">Foro</a></li>
+                <li class="list-group-item"><a routerLink="../tareas">Recordatorios</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-9">
+                    <h1>Contenido Principal</h1>
+                    <h6>
+                        ¡Bienvenidos a nuestra plataforma de cursos en línea!
+                        <br>
+                        
+                        En tu área personal, encontrarás todo lo que necesitas para sacar el máximo provecho de tu experiencia de aprendizaje con nosotros. Aquí puedes acceder a tus cursos, materiales de estudio, recursos adicionales y mucho más.
+                        <br>
+                        ¡Explora y descubre todo lo que tenemos para ofrecerte! Si tienes alguna pregunta o necesitas ayuda, no dudes en ponerte en contacto con nuestro equipo de soporte. Estamos aquí para ayudarte en cada paso del camino.
+                        <br>
+                        ¡Que disfrutes aprendiendo con nosotros!</h6>
+                    <!-- Aquí puedes agregar el contenido principal de tu página -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
