@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ForoComponent } from './foro/foro.component';
 import { TareasComponent } from './tareas/tareas.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { TareasComponent } from './tareas/tareas.component';
     RegistroComponent,
     ForoComponent,
     NosotrosComponent,
-    TareasComponent
+    TareasComponent,
+    PerfilComponent
   ],
   imports: [
     CommonModule,

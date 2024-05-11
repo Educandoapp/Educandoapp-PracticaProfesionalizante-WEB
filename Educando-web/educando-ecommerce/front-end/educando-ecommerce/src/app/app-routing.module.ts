@@ -12,6 +12,7 @@ import { DetailsComponent } from './ecommerce/cursos-container/details/details.c
 import { ForoComponent } from './pages/foro/foro.component';
 import { TareasComponent } from './pages/tareas/tareas.component';
 import {AreaPersonalComponent} from './layouts/area-personal/area-personal.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
 
 const routes: Routes = [
   {path: '*', redirectTo: '', pathMatch: 'full'},
@@ -28,6 +29,7 @@ const routes: Routes = [
     { path: 'foro', component: ForoComponent }, // Agrega la ruta para el componente de foro
     { path: 'area-personal', component: AreaPersonalComponent },
     {path: 'tareas', component: TareasComponent},
+    { path: 'perfil', component: PerfilComponent },
 ];
 
 @NgModule({

@@ -23,6 +23,9 @@ urlpatterns = [
     
     # URL para la vista de lista de usuarios
     path('usuarios/', views.UsuarioView.as_view({'get': 'list_users'}), name='lista_usuarios'),
+
+     # URL para la vista de usuario-modificar
+    path('usuarios/<int:pk>/', views.UsuarioDetailView.as_view(), name='detalle_usuario'), #PUT
     
     # URL para la vista de mis cursos
     path('mis_cursos/', views.MisCursosView.as_view(), name='mis_cursos'),
@@ -49,4 +52,10 @@ urlpatterns = [
     path('foro-respuestas/<int:pk>/eliminar/', views.ForoRespuestaViewSet.as_view({'delete': 'destroy'}), name='eliminar-respuesta-foro'),
 
     path('obtener-usuario/', views.ObtenerUsuarioView.as_view(), name='obtener_usuario'),
+
+    # URL para obtener usuario por Id
+    path('usuario/<int:id_usuario>/', views.UsuarioView.as_view({'get': 'obtener_usuario_por_id'}), name='obtener_usuario_por_id'),
+
+    # URL para la vista de inicio de sesión
+    path('auth/validar_password/', views.UsuarioView.as_view({'post': 'validar_password'}), name='validar_password'),
 ]
