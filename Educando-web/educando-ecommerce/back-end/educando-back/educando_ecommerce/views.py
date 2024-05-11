@@ -1,21 +1,21 @@
 from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer
 from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
-
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-
 import datetime, jwt
 from django.contrib.auth.models import Group
+from django.contrib.auth.hashers import check_password
+from rest_framework.decorators import action
+
 class UsuarioView(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
@@ -107,6 +107,60 @@ class UsuarioView(viewsets.ViewSet):
         # Devolver la lista de usuarios serializada
         return Response(serializer.data, status=200)
     
+    def obtener_usuario_por_id(self, request, id_usuario):
+        try:
+            # Buscar el usuario por su ID
+            usuario = Usuario.objects.get(id_usuario=id_usuario)
+            
+            # Serializar los datos del usuario
+            serializer = UsuarioSerializer(usuario)
+            
+            # Devolver los datos del usuario
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Usuario.DoesNotExist:
+            # Si el usuario no existe, devolver un mensaje de error
+            return Response({'mensaje': 'El usuario no existe'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['post'])
+    def validar_password(self, request):
+        password_plana = request.data.get('password_plana')
+        password_encriptada = request.data.get('password_encriptada')
+
+        if password_plana and password_encriptada:
+            # Verificar si la contraseña plana coincide con la encriptada
+            coincide = check_password(password_plana, password_encriptada)
+
+            if coincide:
+                return Response({'mensaje': 'Las contraseñas coinciden'}, status=200)
+            else:
+                return Response({'mensaje': 'Las contraseñas no coinciden'}, status=200)
+        else:
+            return Response({'mensaje': 'Faltan datos en la solicitud'}, status=400)
+
+class UsuarioDetailView(APIView):
+    def put(self, request, pk):
+        # Obtener el usuario existente
+        usuario = get_object_or_404(Usuario, pk=pk)
+
+        # Actualizar el email si se proporciona en la solicitud
+        if 'email' in request.data:
+            usuario.email = request.data['email']
+
+        # Actualizar la urlImagen si se proporciona en la solicitud
+        if 'urlImagen' in request.data:
+            usuario.urlImagen = request.data['urlImagen']
+
+        # Actualizar la contraseña si se proporciona en la solicitud
+        if 'password' in request.data:
+            usuario.set_password(request.data['password'])
+
+        # Guardar los cambios en el usuario
+        usuario.save()
+
+        # Devolver una respuesta exitosa
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 #===========================================================================================================================================================================    
 
 class ObtenerUsuarioView(APIView):
@@ -162,7 +216,6 @@ class CursoViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = CursoSerializer
 
-
 #===========================================================================================================================================================================
 
 class MisCursosView(APIView):
@@ -199,8 +252,6 @@ class MisCursosView(APIView):
         # Devuelve los cursos serializados
         return Response(serializer.data)
     
-
-
 class AdquirirCursoView(APIView):
     def verificar_token(self, token):
         try:
@@ -245,7 +296,6 @@ class AdquirirCursoView(APIView):
         
         except AuthenticationFailed as e:
             return Response({'mensaje': str(e)}, status=401)
-
 
 #===========================================================================================================================================================================
 class CarritoViewSet(viewsets.ModelViewSet):    

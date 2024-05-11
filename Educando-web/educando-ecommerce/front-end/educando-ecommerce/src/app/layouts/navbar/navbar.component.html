@@ -82,11 +82,10 @@
             </a>
           <div class="d-flex align-items-center">
             <div class="dropdown">
-              <button class="btn btn-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="bi bi-emoji-sunglasses"></i>
+              <button class="btn btn-light dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">                
                 {{ currentUser?.nombre }}
               </button>
+              <img src="{{ currentUser?.urlImagen || 'https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png' }}" alt="Imagen de perfil" class="rounded-circle me-2" style="width: 50px; height: 50px; margin-left: 20px;">
               <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" routerLink="/perfil">Editar perfil</a></li>
                 <li><a class="dropdown-item" routerLink="/" (click)="logout()">Cerrar sesión</a></li>

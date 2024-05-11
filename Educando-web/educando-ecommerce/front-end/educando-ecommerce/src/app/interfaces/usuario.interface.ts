@@ -4,4 +4,6 @@ export interface Usuario {
   nombre: string;
   apellido: string;
   id_rol_id: number;
+  urlImagen : string;
+  password ?: string | undefined;
 }
