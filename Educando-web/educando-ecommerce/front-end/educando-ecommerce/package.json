@@ -26,6 +26,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.4.5",
     "firebase": "^9.22.2",
+    "gsap": "^3.12.5",
     "jquery": "^3.7.0",
     "json-server": "^0.17.3",
     "keen-slider": "^6.8.5",

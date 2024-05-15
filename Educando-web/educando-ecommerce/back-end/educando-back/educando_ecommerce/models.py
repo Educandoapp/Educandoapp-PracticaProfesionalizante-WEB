@@ -31,7 +31,7 @@ class UserManager(BaseUserManager): #BaseUserManager proporciona un método llam
         user.save()
         return user
 
-    def create_superuser(self, email, password, id_rol_id = 1):
+    def create_superuser(self, email, password, id_rol_id=1):
 
         user = self.create_user(email=email, password=password, id_rol_id=id_rol_id)
         user.is_staff = True

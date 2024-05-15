@@ -23,4 +23,9 @@ export class HeaderComponent {
       return;
     }
   }
+
+  // Método para ir directamente a /cursos
+  irACursos() {
+    this.router.navigate(['/cursos']);
+  }
 }

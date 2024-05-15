@@ -388,3 +388,13 @@ class ContactoViewSet(viewsets.ModelViewSet):
     queryset = Contacto.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = ContactoSerializer  
+
+class ContactoView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = ContactoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'mensaje': '¡Gracias por ponerte en contacto con nosotros!'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
