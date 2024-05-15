@@ -122,6 +122,8 @@ export class CheckoutComponent implements OnInit {
     const token = localStorage.getItem('accessToken');
     const cursosSeleccionados = this.cursos;
 
+    console.log('Datos enviados al backend:', { token, cursosSeleccionados });
+
     this.cursosService.adquirirCursos(token, cursosSeleccionados).subscribe(
       (response) => {
         this.checkoutService.resetCart();

@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework import routers
 from educando_ecommerce import views
+from .views import ContactoView
 
 # Definición del enrutador
 router = routers.DefaultRouter()
@@ -58,4 +59,7 @@ urlpatterns = [
 
     # URL para la vista de inicio de sesión
     path('auth/validar_password/', views.UsuarioView.as_view({'post': 'validar_password'}), name='validar_password'),
+
+    # Otras URLs de tu aplicación
+    path('contacto/', ContactoView.as_view(), name='contacto'),
 ]

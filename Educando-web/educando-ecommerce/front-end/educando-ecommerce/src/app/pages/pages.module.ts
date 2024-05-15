@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { ForoComponent } from './foro/foro.component';
 import { TareasComponent } from './tareas/tareas.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PerfilComponent } from './perfil/perfil.component';
     LayautModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule
   ],
   exports: [
     AdministradoresComponent,

@@ -1,0 +1,7 @@
+.p-4 h6 {
+    font-size: 1em; /* Tamaño de fuente base */
+    max-width: 100%; /* Para asegurar que el texto no desborde */
+    overflow: hidden; /* Oculta el texto que desborda */
+    text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto desborda */
+    white-space: nowrap; /* Evita el salto de línea */
+  }

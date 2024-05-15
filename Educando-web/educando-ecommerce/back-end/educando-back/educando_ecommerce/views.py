@@ -264,9 +264,6 @@ class AdquirirCursoView(APIView):
             raise AuthenticationFailed('Token inválido')
 
     def post(self, request):
-        # Obtén el ID del curso a adquirir desde los datos de la solicitud
-        id_curso = request.data.get('id_curso')
-        
         # Obtén el token del usuario desde los datos de la solicitud
         token = request.data.get('token')
 
@@ -279,20 +276,34 @@ class AdquirirCursoView(APIView):
             
             # El token es válido, obtén el usuario autenticado
             usuario = get_object_or_404(Usuario, id_usuario=usuario_id)
+
+            # Obtén la lista de cursos desde los datos de la solicitud
+            cursos_data = request.data.get('cursos', [])
+
+            # Lista para almacenar las instancias de MisCurso creadas
+            mis_cursos = []
+
+            for curso_data in cursos_data:
+                # Obtén el ID del curso de los datos recibidos
+                id_curso = curso_data.get('id_curso')
+
+                try:
+                    # Verifica si el curso existe
+                    curso = Curso.objects.get(id_curso=id_curso)
+                    
+                    # Crea una instancia de MisCurso para vincular el usuario y el curso
+                    mis_curso = MisCurso.objects.create(id_usuario=usuario, id_curso=curso)
+                    
+                    # Agrega la instancia de MisCurso a la lista
+                    mis_cursos.append(mis_curso)
+                except Curso.DoesNotExist:
+                    # Si el curso no existe, agrega un mensaje de error a la respuesta
+                    return Response({'mensaje': f'El curso con ID {id_curso} no existe'}, status=400)
             
-            try:
-                # Verifica si el curso existe
-                curso = Curso.objects.get(id_curso=id_curso)
-                
-                # Crea una instancia de MisCurso para vincular el usuario y el curso
-                mis_curso = MisCurso.objects.create(id_usuario=usuario, id_curso=curso)
-                
-                # Serializa la instancia de MisCurso
-                serializer = MisCursoSerializer(mis_curso)
-                
-                return Response(serializer.data, status=201)
-            except Curso.DoesNotExist:
-                return Response({'mensaje': 'El curso no existe'}, status=400)
+            # Serializa la lista de instancias de MisCurso
+            serializer = MisCursoSerializer(mis_cursos, many=True)
+            
+            return Response(serializer.data, status=201)
         
         except AuthenticationFailed as e:
             return Response({'mensaje': str(e)}, status=401)
@@ -388,3 +399,13 @@ class ContactoViewSet(viewsets.ModelViewSet):
     queryset = Contacto.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = ContactoSerializer  
+
+class ContactoView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = ContactoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'mensaje': '¡Gracias por ponerte en contacto con nosotros!'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
