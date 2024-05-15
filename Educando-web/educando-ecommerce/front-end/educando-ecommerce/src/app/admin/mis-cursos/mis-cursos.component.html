@@ -1,1 +1,50 @@
-<p>mis-cursos works!</p>
+
+<div class="section-title text-center position-relative mb-5 title mt-5">
+  <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Tus cursos</h6>
+  <h1 class="display-4">Aquí puedes acceder a tus cursos</h1>
+</div>
+
+<div class="container-fluid px-5">
+    <div class="row">
+      <!-- Contenido principal -->
+      <div class="col-md-12 px-5">
+        <!-- Cuadro último curso visto -->
+        <div class="card mt-4 btn-rect">
+          <div class="card-header">
+            Último curso visto
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <img [src]="lastCourseImage" alt="Imagen del último curso" class="img-fluid">
+              </div>
+              <div class="col-md-9">
+                <h5 class="card-title">{{ lastCourseTitle }}</h5>
+                <p class="card-text">{{ lastCourseDescription }}</p>
+                <button class="btn btn-primary btn-rect">Continuar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Cuadro línea temporal y avance de cursos -->
+        <div class="card mt-4 btn-rect">
+          <div class="card-header">
+            Línea temporal y avance de cursos
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="timeline-item" *ngFor="let course of courses; let i = index">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <h5>{{ course.nombre_curso }}</h5>
+                  <p>0% completado</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

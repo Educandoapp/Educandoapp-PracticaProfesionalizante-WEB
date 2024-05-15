@@ -13,10 +13,11 @@ import { ForoComponent } from './pages/foro/foro.component';
 import { TareasComponent } from './pages/tareas/tareas.component';
 import {AreaPersonalComponent} from './layouts/area-personal/area-personal.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
+import { MisCursosComponent } from './admin/mis-cursos/mis-cursos.component';
 
 const routes: Routes = [
   {path: '*', redirectTo: '', pathMatch: 'full'},
-     { path: '', component: InicioComponent },
+    { path: '', component: InicioComponent },
     { path: 'contacto', component: ContactoComponent },
     { path: 'login', component: LoginComponent },
     { path: 'nosotros', component: NosotrosComponent },

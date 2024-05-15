@@ -62,11 +62,11 @@
 
           <!-- Menú para el cliente -->
           <ng-template #clientMenu>
-            <a routerLink="/Inicio" class="nav-item nav-link">inicio</a>
-            <a routerLink="/mis-cursos" class="nav-item nav-link">Mis Cursos</a>
-            <a routerLink="/mis-certificaciones" class="nav-item nav-link">Mis Certificaciones</a>
+            <a routerLink="admin/home" class="nav-item nav-link">Home</a>
+            <a routerLink="/admin/mis-cursos" class="nav-item nav-link" (click)="logNavigation()">Mis Cursos</a>
+            <!-- <a routerLink="/mis-certificaciones" class="nav-item nav-link">Mis Certificaciones</a> -->
   
-            <a routerLink="/mis-favoritos" class="nav-item nav-link">Mis Favoritos</a>
+            <!-- <a routerLink="/mis-favoritos" class="nav-item nav-link">Mis Favoritos</a> -->
             <a routerLink="/cursos" class="nav-item nav-link">Cursos de formación</a>
             <a routerLink="/area-personal" class="nav-item nav-link">Área Personal</a>
    <!-- Modifica el enlace para que apunte a la ruta correcta -->

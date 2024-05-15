@@ -6,14 +6,16 @@ import { AuthGuard } from '../guard/guard.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    component: AdminDashboardComponent,
+    path: 'admin',
     canActivate: [AuthGuard],
     children: [
       { path: 'mis-cursos', component: MisCursosComponent },
+      { path: 'home', component: AdminDashboardComponent },
     ]
   }
 ];
+
+console.log('Rutas del módulo de administrador:', routes);
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

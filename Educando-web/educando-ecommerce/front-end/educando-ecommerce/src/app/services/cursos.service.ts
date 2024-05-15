@@ -28,6 +28,11 @@ export class CursosService {
     return this.http.get<Categoria>(`${this.apiUrl}categoria/`);
   }
 
+  // Método para obtener un curso por su ID
+  public obtenerCursoPorId(idCurso: number): Observable<Curso> {
+    return this.http.get<Curso>(`${this.apiUrl}curso/${idCurso}/`);
+  }
+
   // Obtiene los cursos por categoría
   public getCursosPorCategoria(idCategoria: number): Observable<Curso> {
     return this.http.get<Curso>(`${this.apiUrl}cursos_por_categoria/${idCategoria}/`);

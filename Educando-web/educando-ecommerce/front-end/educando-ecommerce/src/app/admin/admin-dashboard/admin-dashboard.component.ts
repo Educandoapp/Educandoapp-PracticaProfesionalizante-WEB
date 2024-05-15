@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/interfaces/usuario.interface';
 import { AuthService } from 'src/app/services/auth.service';
+import { CursosService } from 'src/app/services/cursos.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -23,7 +24,8 @@ export class AdminDashboardComponent implements OnInit {
   currentUser: Usuario | null = null;
 
   constructor(
-    private autenticacionService: AuthService
+    private autenticacionService: AuthService,
+    private cursosService: CursosService
   ) {}
 
   ngOnInit() {
@@ -58,16 +60,24 @@ export class AdminDashboardComponent implements OnInit {
       (response) => {
         // Actualiza los datos de los cursos del usuario
         this.courses = response;
-        // console.log(this.courses)
+        // console.log('Cursos obtenidos:', this.courses);
         this.purchasedCoursesCount = this.courses.length;
         this.completedCoursesCount = this.courses.filter((course) => course.progress === 100).length;
         this.certificationsCount = this.completedCoursesCount;
         if (this.courses.length > 0) {
           const lastCourse = this.courses[this.courses.length - 1];
-          // console.log(lastCourse)
+          // console.log('Último curso obtenido:', lastCourse);
           this.lastCourseTitle = lastCourse.nombre_curso;
           this.lastCourseDescription = lastCourse.descripcion_curso;
-          this.lastCourseImage = lastCourse.imagen_url;
+          this.cursosService.obtenerCursoPorId(lastCourse.id_curso).subscribe(
+            (curso) => {
+              this.lastCourseImage = curso.imagen_url;
+              // console.log('URL de la imagen:', this.lastCourseImage);
+            },
+            (error) => {
+              console.error('Error al obtener la imagen del último curso:', error);
+            }
+          );
         }
       },
       (error) => {

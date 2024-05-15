@@ -47,5 +47,9 @@ export class NavbarComponent implements OnInit {
   public toggleProfileMenu(): void {
     this.showProfileMenu = !this.showProfileMenu;
   }
+
+  logNavigation() {
+    console.log('Navegando a Mis Cursos');
+  }
 }
 
