@@ -1,0 +1,69 @@
+.title {
+    margin-top: 30px;
+}
+
+.format {
+    justify-content: center;
+    align-items: center;
+    max-width: 1400px;
+    margin: auto;
+    text-align: center;
+}
+
+.format_img {
+    display: flex;
+    margin: 10px;
+    background-color: #0d6efd;
+    color: #ffffff;
+    border: #0000;
+}
+
+.card-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden; /* Oculta el desbordamiento del contenido */
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.card-body {
+    padding: 20px;
+    background-color: #0d6efd; /* Fondo de la card */
+    color: #ffffff; /* Color del texto */
+    min-height: 240px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase; 
+}
+
+.card-description {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 15px; /* Añade un margen inferior adicional */
+}
+
+.card-subtitle {
+    font-weight: bold; /* Hacemos el subtítulo (rol) en negrita */
+    margin-bottom: 10px; /* Añadimos un pequeño margen inferior */
+}
+

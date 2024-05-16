@@ -1,0 +1,9 @@
+.btn-rect {
+  border-radius: 0;
+}
+
+.qr-code img{
+  display: flex;
+  justify-content:flex-end;
+  align-items: flex-end;
+}

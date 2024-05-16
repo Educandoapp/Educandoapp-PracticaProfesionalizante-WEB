@@ -1,0 +1,49 @@
+<div class="container-fluid px-5">
+  <div class="row">
+    <!-- Contenido principal -->
+    <div class="col-md-12 px-5">
+      <!-- Cabecera de la página -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Hola, {{ userName }} {{userSurname}} </h1>
+        <div>
+          <!-- Menú desplegable de perfil -->
+          <div class="profile-menu" *ngIf="showProfileMenu">
+            <!-- Contenido del menú de perfil -->
+            <ul>
+              <li>{{ userRole }}</li>
+              <li>Mi Perfil</li>
+              <li>Cerrar sesión</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+<!-- Cuadros con gráficos -->
+<div class="row">
+  <div class="col-md-4">
+    <div class="card card-custom bg-primary btn-rect">
+      <div class="card-body">
+        <h5 class="card-title text-white text-uppercase">Cursos adquiridos</h5>
+        <p class="card-text text-white fs-3"><strong>{{ purchasedCoursesCount }}</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-custom bg-success btn-rect">
+      <div class="card-body">
+        <h5 class="card-title text-white text-uppercase">Cursos completados</h5>
+        <p class="card-text text-white fs-3"><strong>{{ completedCoursesCount }}</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-custom bg-secondary btn-rect">
+      <div class="card-body">
+        <h5 class="card-title text-white text-uppercase">Certificaciones</h5>
+        <p class="card-text text-white fs-3"><strong>{{ certificationsCount }}</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,59 @@
+<div class="foro-container">
+  <h2 class="foro-titulo">Foro Estudiantil</h2>
+  <div class="agregar-tema-container">
+    <button class="agregar-tema-btn" (click)="mostrarFormularioAgregarTema()">Agregar Nuevo Tema</button>
+  </div>
+  <div class="formulario-container" *ngIf="mostrarFormulario">
+    <form class="formulario" (submit)="agregarNuevoTema()">
+      <input type="text" placeholder="Título" [(ngModel)]="nuevoTema.titulo" name="titulo" required>
+      <textarea placeholder="Mensaje" [(ngModel)]="nuevoTema.mensaje" name="mensaje" required></textarea>
+      <button type="submit" class="enviar-btn">Enviar</button>
+      <div class="cancelar-container">
+        <button type="button" class="cancelar-btn" (click)="ocultarFormularioAgregarTema()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="mensajes.length > 0; else noMensajes">
+    <div *ngFor="let mensaje of mensajes" class="mensaje">
+      <div class="mensaje-header">
+        <h5>{{ mensaje.titulo }}</h5>
+      </div>
+      <div class="mensaje-contenido">
+        <p>{{ mensaje.mensaje }}</p>
+        <p class="fecha-mensaje">{{ mensaje.fecha | date:'medium' }}</p>
+      </div>
+      <div class="mensaje-footer">
+        <div class="usuario-container">
+          <span class="usuario">{{ mensaje.nombre }}</span>
+          <button  *ngIf="esUsuarioActual(mensaje.id_usuarios) "class="eliminar-btn" (click)="eliminarMensaje(mensaje.id_foro)">Borrar</button>
+        </div>
+      </div>
+      
+      <div class="respuestas-container" *ngIf="respuestasPorMensaje[mensaje.id_foro] && respuestasPorMensaje[mensaje.id_foro].length > 0">
+        <h6>Respuestas</h6>
+        <ng-container *ngFor="let respuesta of respuestasPorMensaje[mensaje.id_foro]; let i = index">
+          <div *ngIf="respuesta && respuesta.id_foro === mensaje.id_foro" class="respuesta" [ngClass]="{'sombra-tenue': i % 2 === 0}">
+            <p>{{ respuesta.nombre }}: {{ respuesta.mensaje }}</p> 
+            <p class="fecha-mensaje">{{ respuesta.fecha | date:'medium' }}</p>
+            <!-- Mostrar el botón de borrado solo si el usuario actual es el que generó la respuesta -->
+            <button *ngIf="esUsuarioActual(respuesta.id_usuario)" class="eliminar-btn" (click)="eliminarRespuesta(respuesta.id_foro_respuesta)">Borrar</button>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="responder-container" *ngIf="!mensaje.respondiendo">
+        <button class="responder-btn" (click)="mostrarAreaRespuesta(mensaje)">Responder</button>
+      </div>
+      <div *ngIf="mensajeActual === mensaje" class="area-respuesta">
+        <textarea #areaRespuesta class="textarea-respuesta"></textarea>
+        <div class="respuesta-botones">
+          <button class="enviar-btn" (click)="enviarRespuesta(areaRespuesta.value, mensaje)">Enviar</button>
+          <button class="cancelar-btn" (click)="cancelarRespuesta()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noMensajes>
+    <p>No hay mensajes en el foro aún.</p>
+  </ng-template>
+</div>

@@ -1,0 +1,83 @@
+
+<div class="section-title text-center position-relative mb-5 title mt-5">
+  <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Cursos de formación</h6>
+  <h1 class="display-4">Consulta nuestras rutas de aprendizaje</h1>
+</div>
+
+<!-- Botones de filtrado por categoría -->
+<div class="container pb-6">
+  <div class="row pt-3 pb-4">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3" *ngFor="let categoria of categorias">
+      <button class="btn btn-block btn-lg btn-rect pt-4 pb-4" [ngClass]="categoria.colorClass" (click)="filtrarCursosPorCategoria(categoria.id_categoria)">{{ categoria.nombre }}</button>
+    </div>
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+      <button class="btn btn-block btn-lg btn-rect pt-4 pb-4 bg-light border-dark text-dark" (click)="mostrarTodosLosCursos()">Todos los cursos</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de búsqueda avanzada -->
+<div class="modal" id="modalBusquedaAvanzada">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Encabezado del modal -->
+      <div class="modal-header">
+        <h5 class="modal-title">Búsqueda Avanzada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Cuerpo del modal -->
+      <div class="modal-body">
+        <form (submit)="realizarBusqueda()">
+          <div class="mb-3">
+            <label for="selectTipoBusqueda" class="form-label">Selecciona el tipo de búsqueda:</label>
+            <select class="form-select" id="selectTipoBusqueda" [(ngModel)]="tipoBusqueda" name="tipoBusqueda">
+              <option value="categoria">Buscar por categoría</option>
+              <option value="nombre">Buscar por nombre del curso</option>
+              <option value="calificacion">Buscar por calificación mínima</option>
+              <option value="precio">Buscar por precio máximo</option>
+            </select>
+          </div>
+          <div *ngIf="tipoBusqueda === 'categoria'" class="mb-3">
+            <label for="selectCategoria" class="form-label">Elije una categoría:</label>
+            <select class="form-select" id="selectCategoria" [(ngModel)]="categoriaSeleccionada" name="categoriaSeleccionada">
+              <option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">{{ categoria.nombre }}</option>
+            </select>
+          </div>
+          <div *ngIf="tipoBusqueda === 'nombre'" class="mb-3">
+            <label for="inputNombre" class="form-label">Nombre del curso:</label>
+            <input type="text" class="form-control" id="inputNombre" [(ngModel)]="nombreCurso" name="nombreCurso">
+          </div>
+          <div *ngIf="tipoBusqueda === 'calificacion'" class="mb-3">
+            <label for="inputCalificacion" class="form-label">Calificación mínima:</label>
+            <input type="number" class="form-control" id="inputCalificacion" [(ngModel)]="calificacionMinima" name="calificacionMinima">
+          </div>
+          <div *ngIf="tipoBusqueda === 'precio'" class="mb-3">
+            <label for="inputPrecio" class="form-label">Precio máximo:</label>
+            <input type="number" class="form-control" id="inputPrecio" [(ngModel)]="precioMaximo" name="precioMaximo">
+          </div>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Botón de búsqueda avanzada -->
+<div class="text-center mb-5">
+  <button class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#modalBusquedaAvanzada">Búsqueda Avanzada</button>
+</div>
+
+<!-- Título de los cursos -->
+<h2 class="display-6 text-center mt-6" style="margin: 90px 0 30px 0;">{{ tituloCursos }}</h2>
+
+<!-- Componente para mostrar los cursos -->
+<app-cursos-container id="cursos" [cursosFiltrados]="cursosFiltrados" [sinCursos]="sinCursos"></app-cursos-container>
+
+<!-- Contenedor para mostrar el total de la compra -->
+<ng-container *ngIf="{total: total$ | async} as dataCart">
+  <div class="container container-fluid d-flex justify-content-center align-items-center flex-column end-buy-container " *ngIf="dataCart.total !== 0">
+    <h2 style="margin: 90px 0 30px 0;">Su compra total es de $ {{dataCart.total}}</h2>
+    <!-- <p class="fw-lighter mt-2 text-center">Ir al carrito</p> -->
+    <button class="btn btn-primary fs-2 end-buy btn-rect" routerLink="/cursos/checkout">Terminar Compra</button>
+  </div>
+</ng-container>
+

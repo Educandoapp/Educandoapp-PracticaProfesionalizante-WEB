@@ -1,0 +1,78 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="mb-3">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+                role="tab" aria-controls="home" aria-selected="true">Dato Usuario</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+                role="tab" aria-controls="profile" aria-selected="false">Actualizar Contraseña</button>
+            </li>          
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <br>
+            <br>
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <div class="row">              
+                <div class="col-4">
+                  <img id="imgUsuario" [src]="UrlImagenIngresada || usuario.urlImagen || 'https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png'" alt="imagen usuario" class="img-thumbnail">
+                </div>
+                <div class="col-8">
+                  <div class="form-group row">
+                    <label for="txtUsuario" class="col-2">Usuario:</label>
+                    <div class="col-8">
+                      <p class="form-control">{{ usuario.nombre }} {{ usuario.apellido }}</p>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="txtEmail" class="col-2">Email:</label>
+                    <div class="col-8">
+                      <input type="text" name="" id="" class="form-control" [(ngModel)]="usuario.email" placeholder="Email">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="txtImagenUrl" class="col-2">Url imagen:</label>
+                    <div class="col-8">
+                      <input type="text" name="txtImagenUrl" [(ngModel)]="UrlImagenIngresada" class="form-control" placeholder="Url imagen">
+                    </div>
+                  </div>              
+                </div>
+              </div>           
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="col-md-6 offset-md-3">
+                <h4 class="text-center">Cambio de contraseña</h4>
+                <br>                    
+                <div class="form-group row">
+                  <label for="nuevaPassword" class="col-5">Nueva contraseña: </label>
+                  <div class="col-7">
+                    <input type="password" class="form-control" [(ngModel)]="nuevaPassword">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="confirmarPassword" class="col-5">Confirmar contraseña: </label>
+                  <div class="col-7">
+                      <input type="password" class="form-control" [(ngModel)]="confirmarPassword">
+                  </div>
+              </div>                                              
+            </div>                             
+          </div>
+          <div class="form-group text-center">
+            <div *ngIf="mostrarErrorContrasenas" class="alert alert-danger">Las contraseñas no coinciden</div> 
+            <div *ngIf="mostrarExito" class="alert alert-success">Cambios realizados con éxito</div>
+            <div *ngIf="mostrarRepetido" class="alert alert-danger">La contraseña ya existe</div>    
+            <button class="btn btn-primary mr-2" (click)="actualizarUsuario(usuario)">Actualizar</button>
+            <button class="btn btn-info ml-2" (click)="cancelar()">Cancelar</button>                     
+          </div> 
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
