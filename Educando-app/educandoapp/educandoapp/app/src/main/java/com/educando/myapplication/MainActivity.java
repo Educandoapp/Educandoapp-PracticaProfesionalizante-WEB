@@ -77,12 +77,11 @@ public class MainActivity extends AppCompatActivity {
         openUrlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://www.google.com";
+                String url = "http://10.0.2.2:4200"; // Reemplaza con la dirección IP y puerto correspondientes
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-
-                if (intent.resolveActivity(getPackageManager()) != null) {
+                try {
                     startActivity(intent);
-                } else {
+                } catch (Exception e) {
                     Toast.makeText(MainActivity.this, "No se puede abrir la URL. Instala un navegador web.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -112,6 +111,4 @@ public class MainActivity extends AppCompatActivity {
         CategoryAdapter categoryAdapter = new CategoryAdapter(categoryList);
         recyclerViewCategory.setAdapter(categoryAdapter);
     }
-
-
 }

@@ -1,9 +1,12 @@
 package com.educando.myapplication.db;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import androidx.annotation.Nullable;
 
 import com.educando.myapplication.Contacto;
 import com.educando.myapplication.Usuario;
@@ -19,17 +22,18 @@ public class DbUsuarios extends DbHelper {
 
     Context context;
 
-    public DbUsuarios(Context context) {
-        super(context); // Llama al constructor de la superclase
+    public DbUsuarios(@Nullable Context context) {
+        super(context);
         this.context = context;
     }
 
     public long insertarContacto(String nombre, String apellido, String email, String password) {
         long id = 0;
 
-        SQLiteDatabase db = getWritableDatabase(); // Obtiene la instancia de la base de datos
-
         try {
+            DbHelper dbHelper = new DbHelper(context);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
             ContentValues values = new ContentValues();
             values.put("nombre", nombre);
             values.put("apellido", apellido);
@@ -42,8 +46,6 @@ public class DbUsuarios extends DbHelper {
             id = db.insert(TABLE_USUARIOS, null, values);
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            db.close();
         }
         return id;
     }
@@ -51,9 +53,10 @@ public class DbUsuarios extends DbHelper {
     public boolean actualizarEstadoLogueado(String email, int logueado) {
         boolean actualizado = false;
 
-        SQLiteDatabase db = getWritableDatabase(); // Obtiene la instancia de la base de datos
-
         try {
+            DbHelper dbHelper = new DbHelper(context);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
             ContentValues values = new ContentValues();
             values.put("logueado", logueado);
 
@@ -64,8 +67,6 @@ public class DbUsuarios extends DbHelper {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            db.close();
         }
 
         return actualizado;
@@ -74,7 +75,8 @@ public class DbUsuarios extends DbHelper {
     public Usuario obtenerUsuarioLogueado() {
         Usuario usuario = null;
 
-        SQLiteDatabase db = getReadableDatabase(); // Obtiene la instancia de la base de datos
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = null;
 
@@ -115,9 +117,10 @@ public class DbUsuarios extends DbHelper {
     public boolean actualizarPassword(int idUsuario, String newPassword) {
         boolean actualizado = false;
 
-        SQLiteDatabase db = getWritableDatabase(); // Obtiene la instancia de la base de datos
-
         try {
+            DbHelper dbHelper = new DbHelper(context);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
             ContentValues values = new ContentValues();
             values.put("password", newPassword);
 
@@ -128,17 +131,15 @@ public class DbUsuarios extends DbHelper {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            db.close();
         }
 
         return actualizado;
     }
-
     public boolean existeUsuario(String email) {
         boolean existe = false;
 
-        SQLiteDatabase db = getWritableDatabase(); // Obtiene la instancia de la base de datos
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         Cursor cursor = null;
 
@@ -184,7 +185,8 @@ public class DbUsuarios extends DbHelper {
     public String obtenerPassword(String email) {
         String hashedPassword = null;
 
-        SQLiteDatabase db = getReadableDatabase(); // Obtiene la instancia de la base de datos
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = null;
 
@@ -212,9 +214,10 @@ public class DbUsuarios extends DbHelper {
     public long insertarPost(int idUsuario, String titulo, String mensaje) {
         long id = 0;
 
-        SQLiteDatabase db = getWritableDatabase(); // Obtiene la instancia de la base de datos
-
         try {
+            DbHelper dbHelper = new DbHelper(context);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
             ContentValues values = new ContentValues();
             values.put("id_usuario", idUsuario);
             values.put("titulo", titulo);
@@ -229,8 +232,6 @@ public class DbUsuarios extends DbHelper {
             id = db.insert(TABLE_CONTACTO, null, values);
         } catch (Exception ex) {
             ex.printStackTrace();
-        } finally {
-            db.close();
         }
         return id;
     }
@@ -242,7 +243,7 @@ public class DbUsuarios extends DbHelper {
         Usuario usuarioLogueado = obtenerUsuarioLogueado();
 
         if (usuarioLogueado != null) {
-            SQLiteDatabase db = getReadableDatabase(); // Obtiene la instancia de la base de datos
+            SQLiteDatabase db = getReadableDatabase();
             Cursor cursor = null;
 
             try {
@@ -252,10 +253,10 @@ public class DbUsuarios extends DbHelper {
                 if (cursor != null && cursor.moveToFirst()) {
                     do {
                         // Obtén los datos del mensaje
-                        int idMensaje = cursor.getInt(cursor.getColumnIndex("id_contact"));
-                        String fecha = cursor.getString(cursor.getColumnIndex("fecha"));
-                        String titulo = cursor.getString(cursor.getColumnIndex("titulo"));
-                        String mensaje = cursor.getString(cursor.getColumnIndex("mensaje"));
+                        @SuppressLint("Range") int idMensaje = cursor.getInt(cursor.getColumnIndex("id_contact"));
+                        @SuppressLint("Range") String fecha = cursor.getString(cursor.getColumnIndex("fecha"));
+                        @SuppressLint("Range") String titulo = cursor.getString(cursor.getColumnIndex("titulo"));
+                        @SuppressLint("Range") String mensaje = cursor.getString(cursor.getColumnIndex("mensaje"));
 
                         // Crea un objeto Contacto con los datos obtenidos
                         Contacto mensajeEnviado = new Contacto(idMensaje, fecha, usuarioLogueado.getId_usuario(), titulo, mensaje);
@@ -273,4 +274,5 @@ public class DbUsuarios extends DbHelper {
         }
         return mensajesEnviados;
     }
+
 }
