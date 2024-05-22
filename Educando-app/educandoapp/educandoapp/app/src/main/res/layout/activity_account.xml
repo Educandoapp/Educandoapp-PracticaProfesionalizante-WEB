@@ -404,7 +404,29 @@
                         android:contentDescription="Ir a la pantalla de inicio" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/acc_go_recordatorios"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical">
 
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/btn_2" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="Ir a la pantalla de recordatorios"
+                        android:text="Recordatorios"
+                        android:textAlignment="center"
+                        android:textColor="#707070"
+                        android:onClick="irARecordatorio" /> </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/acc_go_cursos"
@@ -429,7 +451,6 @@
                         android:textColor="#707070"
                         android:contentDescription="Ir a la pantalla de Mis Cursos" />
                 </LinearLayout>
-
 
             </LinearLayout>
         </com.google.android.material.bottomappbar.BottomAppBar>
