@@ -3,6 +3,9 @@ package com.educando.myapplication;
 
 import static com.educando.myapplication.R.id.acc_go_main;
 import static com.educando.myapplication.R.id.acc_go_cursos;
+import static com.educando.myapplication.R.id.acc_go_recordatorios;
+
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -107,6 +110,15 @@ public class AccountActivity extends AppCompatActivity {
 
                 }
             });
+            LinearLayout Recordatorios = findViewById(acc_go_recordatorios);
+            Recordatorios.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(AccountActivity.this, Recordatorio.class);
+                    startActivity(intent);
+                }
+            });
 
             LinearLayout cursos = findViewById(acc_go_cursos);
             cursos.setOnClickListener(new View.OnClickListener() {
@@ -127,11 +139,19 @@ public class AccountActivity extends AppCompatActivity {
             openUrlButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String url = "http://10.0.2.2:4200"; // Reemplaza con la dirección IP y puerto correspondientes
+                    // Define la URL que deseas abrir
+                    String url = "https://www.google.com"; // Reemplaza con tu URL real
+
+                    // Crea un intent para abrir la URL en un navegador web
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    try {
+
+                    // Verifica si hay una aplicación para manejar la acción de abrir la URL
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        // Abre la URL en un navegador web
                         startActivity(intent);
-                    } catch (Exception e) {
+                    } else {
+                        // No se encontró una aplicación para manejar la acción
+                        // Puedes mostrar un mensaje de error o manejarlo como prefieras
                         Toast.makeText(AccountActivity.this, "No se puede abrir la URL. Instala un navegador web.", Toast.LENGTH_SHORT).show();
                     }
                 }
