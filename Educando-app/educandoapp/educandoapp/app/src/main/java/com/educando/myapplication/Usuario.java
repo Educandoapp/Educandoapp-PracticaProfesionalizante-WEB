@@ -6,11 +6,26 @@ public class Usuario {
     private String apellido;
     private String email;
     private String password;
+    private String token;
 
     public Usuario(int id_usuario, String nombre, String apellido, String email, String password) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Usuario(int id_usuario, String nombre, String apellido, String email, String password, String token) {
+        this.id_usuario = id_usuario;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+        this.token = token;
+    }
+
+    public Usuario(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -53,5 +68,13 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

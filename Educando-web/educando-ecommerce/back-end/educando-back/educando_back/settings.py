@@ -31,7 +31,7 @@ CSRF_COOKIE_HTTPONLY = False
 DEBUG = 'True'
 #DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.5', 'localhost', '127.0.0.1']
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
@@ -97,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'educando',
         'USER': 'root',
-        'PASSWORD':'xncrw1zf',
+        'PASSWORD':'admin',
         'HOST': 'localhost',
        }
 }

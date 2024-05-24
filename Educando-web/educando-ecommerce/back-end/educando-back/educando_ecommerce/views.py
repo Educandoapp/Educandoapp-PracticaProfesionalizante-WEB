@@ -16,6 +16,10 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import action
 
+from django.http import JsonResponse
+
+def test_connection(request):
+    return JsonResponse({'message': 'Connection successful'})
 class UsuarioView(viewsets.ViewSet):
     permission_classes = [AllowAny]
 

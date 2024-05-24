@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from educando_ecommerce import views
 from .views import ContactoView
+from .views import test_connection
 
 # Definición del enrutador
 router = routers.DefaultRouter()
@@ -15,6 +16,8 @@ router.register(r'contacto', views.ContactoViewSet, basename='contacto')
 urlpatterns = [
     # Incluir las URLs del enrutador
     path('', include(router.urls)),
+
+    path('test_connection/', test_connection, name='test_connection'),
     
     # URL para la vista de inicio de sesión
     path('login/', views.UsuarioView.as_view({'post': 'inicio_sesion'}), name='login'),

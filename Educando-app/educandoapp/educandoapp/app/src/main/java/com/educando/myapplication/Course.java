@@ -1,5 +1,7 @@
 package com.educando.myapplication;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Course {
     private String name;
     private String description;
