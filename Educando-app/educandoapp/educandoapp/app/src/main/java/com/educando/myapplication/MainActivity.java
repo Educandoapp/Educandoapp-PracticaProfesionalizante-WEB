@@ -1,8 +1,5 @@
 package com.educando.myapplication;
 
-import static com.educando.myapplication.R.id.Cuenta;
-import static com.educando.myapplication.R.id.Mycourse;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,13 +8,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.educando.myapplication.db.DbHelper;
 import com.educando.myapplication.db.DbUsuarios;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -44,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         // Obtén una referencia al TextView nombre_main
         nombre_main = findViewById(R.id.nombre_main);
 
-        LinearLayout cuenta = findViewById(Cuenta);
-        LinearLayout miscursos = findViewById(Mycourse);
+        LinearLayout cuenta = findViewById(R.id.Cuenta);
+        LinearLayout miscursos = findViewById(R.id.Mycourse);
 
         // Aquí obtén el nombre del usuario logueado, por ejemplo, de tu sistema de autenticación
         Usuario nombreUsuario = dbUsuarios.obtenerUsuarioLogueado();
@@ -72,17 +69,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button openUrlButton = findViewById(R.id.button_compra);
+        FloatingActionButton fabWhatsapp = findViewById(R.id.fab_whatsapp);
 
-        openUrlButton.setOnClickListener(new View.OnClickListener() {
+        fabWhatsapp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://10.0.2.2:4200"; // Reemplaza con la dirección IP y puerto correspondientes
+                String phoneNumber = "+5493876286703";
+                String url = "https://wa.me/" + phoneNumber;
+                url = url + "?text=" + "Hola, quiero información sobre los cursos";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 try {
                     startActivity(intent);
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "No se puede abrir la URL. Instala un navegador web.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "No se puede abrir WhatsApp. Instala la aplicación.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
