@@ -267,6 +267,31 @@
                         android:textAlignment="center"
                         android:textColor="#707070" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/map"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25"
+                    android:orientation="vertical"
+                    android:contentDescription="Nuestra Sede">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ubic" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nuestra Sede"
+                        android:textAlignment="center"
+                        android:textColor="#707070" />
+                </LinearLayout>
+
             </LinearLayout>
         </com.google.android.material.bottomappbar.BottomAppBar>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

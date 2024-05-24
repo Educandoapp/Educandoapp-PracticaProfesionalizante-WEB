@@ -43,7 +43,7 @@ public class Recordatorio extends AppCompatActivity {
         LinearLayout cuenta = findViewById(Cuenta);
         LinearLayout miscursos = findViewById(main);
 
-        editTextRecordatorio = findViewById(R.id.editTextRecordatorio1);
+        editTextRecordatorio = findViewById(R.id.editTextRecordatorio);
         datePicker = findViewById(R.id.datePicker);
 
         preferencias = getSharedPreferences("MisRecordatorios", MODE_PRIVATE);

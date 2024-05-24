@@ -38,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
         setupCategoryRecyclerView();
 
+        //referencia al boton del mapa
+        LinearLayout layoutUbicacion = findViewById(R.id.map);
+        layoutUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Inicia la actividad del mapa
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Obtén una referencia al TextView nombre_main
         nombre_main = findViewById(R.id.nombre_main);
 
@@ -68,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
         FloatingActionButton fabWhatsapp = findViewById(R.id.fab_whatsapp);
 
