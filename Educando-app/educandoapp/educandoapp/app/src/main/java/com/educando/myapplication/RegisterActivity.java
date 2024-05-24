@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.educando.myapplication.db.DbUsuarios;
@@ -74,6 +75,18 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 }
+            }
+        });
+
+        // Configuración del OnClickListener para el TextView de iniciar sesión
+        TextView textView2 = findViewById(R.id.textView2);
+        textView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navega a la pantalla de inicio de sesión
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish(); // Cierra esta actividad
             }
         });
     }

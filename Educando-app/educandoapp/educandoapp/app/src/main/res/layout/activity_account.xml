@@ -354,7 +354,7 @@
                             android:layout_height="50dp"
                             android:layout_margin="24dp"
                             android:background="@drawable/background_button2"
-                            android:text="Desconectar"
+                            android:text="Cerrar sesión"
                             android:textColor="#ffffff"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -392,7 +392,8 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_1" />
+                        android:src="@drawable/btn_1"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -416,7 +417,8 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_2" />
+                        android:src="@drawable/bell"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView11"
@@ -440,7 +442,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_3" />
+                        android:src="@drawable/btn_2" />
 
                     <TextView
                         android:id="@+id/textView12"

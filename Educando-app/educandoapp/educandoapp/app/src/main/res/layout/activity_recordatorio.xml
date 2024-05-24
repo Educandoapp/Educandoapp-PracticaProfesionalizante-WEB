@@ -96,16 +96,17 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_1" />
+                        android:src="@drawable/btn_1"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:contentDescription="Ir a la pantalla de inicio"
                         android:text="Inicio"
                         android:textAlignment="center"
-                        android:textColor="#707070"
-                        android:contentDescription="Ir a la pantalla de inicio" />
+                        android:textColor="#707070" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -126,10 +127,10 @@
                         android:id="@+id/textView12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cuenta"
+                        android:contentDescription="Ir a la pantalla mi Cuenta"
+                        android:text="Mi Cuenta"
                         android:textAlignment="center"
-                        android:textColor="#707070"
-                        android:contentDescription="Ir a la pantalla mi Cuenta" />
+                        android:textColor="#707070" />
                 </LinearLayout>
 
             </LinearLayout>

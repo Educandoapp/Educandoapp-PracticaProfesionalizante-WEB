@@ -14,7 +14,7 @@ import com.educando.myapplication.db.DbUsuarios;
 public class ChangePassActivity extends AppCompatActivity {
 
     EditText oldPasswordEditText, newPassword1EditText, newPassword2EditText;
-    Button changePassword;
+    Button changePassword, cancelButton;
     DbUsuarios dbUsuarios;
 
     @Override
@@ -26,6 +26,7 @@ public class ChangePassActivity extends AppCompatActivity {
         newPassword1EditText = findViewById(R.id.txtchangepass1);
         newPassword2EditText = findViewById(R.id.txtchangepass2);
         changePassword = findViewById(R.id.changePassword);
+        cancelButton = findViewById(R.id.cancelButton);
         dbUsuarios = new DbUsuarios(this);
 
         changePassword.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +73,14 @@ public class ChangePassActivity extends AppCompatActivity {
                         Toast.makeText(ChangePassActivity.this, "La contraseña antigua es incorrecta", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Terminar la actividad y volver a la anterior
+                finish();
             }
         });
     }

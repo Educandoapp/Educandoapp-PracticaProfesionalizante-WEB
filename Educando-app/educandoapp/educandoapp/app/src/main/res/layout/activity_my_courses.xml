@@ -80,7 +80,8 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:contentDescription="Ícono de inicio"
-                        android:src="@drawable/btn_1" />
+                        android:src="@drawable/btn_1"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -112,7 +113,7 @@
                         android:id="@+id/textView13"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cuenta"
+                        android:text="Mi Cuenta"
                         android:textAlignment="center"
                         android:textColor="#707070" />
                 </LinearLayout>
