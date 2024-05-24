@@ -140,20 +140,12 @@ public class AccountActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     // Define la URL que deseas abrir
-                    String url = "https://www.google.com"; // Reemplaza con tu URL real
+                    String url = "http://10.0.2.2:4200"; // Reemplaza con tu URL real
 
                     // Crea un intent para abrir la URL en un navegador web
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
 
-                    // Verifica si hay una aplicación para manejar la acción de abrir la URL
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        // Abre la URL en un navegador web
-                        startActivity(intent);
-                    } else {
-                        // No se encontró una aplicación para manejar la acción
-                        // Puedes mostrar un mensaje de error o manejarlo como prefieras
-                        Toast.makeText(AccountActivity.this, "No se puede abrir la URL. Instala un navegador web.", Toast.LENGTH_SHORT).show();
-                    }
                 }
             });
 
