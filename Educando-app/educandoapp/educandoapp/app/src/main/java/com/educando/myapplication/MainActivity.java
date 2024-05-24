@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,7 +81,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Obtén una referencia al botón "Abrir URL"
+        Button openUrlButton = findViewById(R.id.button_compra);
 
+        // Configura un oyente de clic para el botón
+        openUrlButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Define la URL que deseas abrir
+                String url = "http://10.0.2.2:4200"; // Reemplaza con tu URL real
+
+                // Crea un intent para abrir la URL en un navegador web
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+
+            }
+        });
 
         FloatingActionButton fabWhatsapp = findViewById(R.id.fab_whatsapp);
 
