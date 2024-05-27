@@ -63,6 +63,34 @@
                     app:layout_constraintStart_toStartOf="@+id/textView3"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp">
+
+
+                    <ImageView
+                        android:id="@+id/instagram_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/instagram"
+                        android:contentDescription="Icono de Instagram" />
+
+                    <ImageView
+                        android:id="@+id/facebook_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/facebook"
+                        android:contentDescription="Icono de Facebook" />
+
+
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Manejar clic en icono de Instagram
+        ImageView instagramIcon = findViewById(R.id.instagram_icon);
+        instagramIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String instagramUrl = "https://www.instagram.com/tu_pagina_de_instagram";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(instagramUrl));
+                startActivity(intent);
+            }
+        });
+
+        // Manejar clic en icono de Facebook
+        ImageView facebookIcon = findViewById(R.id.facebook_icon);
+        facebookIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String facebookUrl = "https://www.facebook.com/tu_pagina_de_facebook";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
+                startActivity(intent);
+            }
+        });
 
         dbHelper = new DbHelper(this);
         dbUsuarios = new DbUsuarios(this); // Inicializa DbUsuarios
