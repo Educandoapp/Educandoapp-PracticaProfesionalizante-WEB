@@ -161,6 +161,14 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
 ]
 
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'accept',
+    'origin',
+    'x-requested-with'
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 AUTH_USER_MODEL = 'educando_ecommerce.Usuario'

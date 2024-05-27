@@ -63,6 +63,12 @@ urlpatterns = [
     # URL para la vista de inicio de sesión
     path('auth/validar_password/', views.UsuarioView.as_view({'post': 'validar_password'}), name='validar_password'),
 
+    # URL para obtener las categorías
+    path('categorias/', views.CategoriaViewSet.as_view({'get': 'list'}), name='categorias'),
+
+    # URL para obtener todos los cursos
+    path('cursos/', views.CursoViewSet.as_view({'get': 'list'}), name='cursos'),
+
     # Otras URLs de tu aplicación
     path('contacto/', ContactoView.as_view(), name='contacto'),
 ]

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,18 +17,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static com.educando.myapplication.R.id.Cuenta;
 import static com.educando.myapplication.R.id.main;
 
+
 public class Recordatorio extends AppCompatActivity {
 
     private SharedPreferences preferencias;
     private List<String> listaTareas;
     private TareasAdapter adapter;
+    private EditText editTextRecordatorio;
+    private DatePicker datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +42,9 @@ public class Recordatorio extends AppCompatActivity {
         setContentView(R.layout.activity_recordatorio);
         LinearLayout cuenta = findViewById(Cuenta);
         LinearLayout miscursos = findViewById(main);
+
+        editTextRecordatorio = findViewById(R.id.editTextRecordatorio);
+        datePicker = findViewById(R.id.datePicker);
 
         preferencias = getSharedPreferences("MisRecordatorios", MODE_PRIVATE);
 
@@ -66,12 +76,20 @@ public class Recordatorio extends AppCompatActivity {
         });
     }
 
-    private void guardarTarea(String tarea) {
+    private void guardarTarea(String tarea, String fechaSeleccionada) {
         SharedPreferences.Editor editor = preferencias.edit();
         int contadorTareas = preferencias.getAll().size();
-        editor.putString("recordatorio_" + contadorTareas, tarea);
+        editor.putString("recordatorio_" + contadorTareas, tarea + "###" + fechaSeleccionada);
         editor.apply();
         mostrarListaTareas();
+    }
+
+    private String obtenerFechaActual() {
+        // Implementación para obtener la fecha actual en el formato deseado
+        // Puedes utilizar la clase java.text.SimpleDateFormat o java.time.LocalDate (API 26+)
+        // Ejemplo con SimpleDateFormat:
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(new java.util.Date());
     }
 
     private void mostrarListaTareas() {
@@ -92,13 +110,24 @@ public class Recordatorio extends AppCompatActivity {
         }
     }
 
+    private String obtenerFechaFormateada(Date fecha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(fecha);
+    }
     public void guardarTareaOnClick(View view) {
-        EditText editTextTarea = findViewById(R.id.editTextRecordatorio);
-        String tarea = editTextTarea.getText().toString();
+        String tarea = editTextRecordatorio.getText().toString();
         if (!tarea.isEmpty()) {
-            guardarTarea(tarea);
+            int dia = datePicker.getDayOfMonth();
+            int mes = datePicker.getMonth();
+            int anio = datePicker.getYear();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(anio, mes, dia);
+            String fechaSeleccionada = obtenerFechaFormateada(calendar.getTime());
+
+            guardarTarea(tarea, fechaSeleccionada);
             Toast.makeText(this, "Tarea guardada correctamente", Toast.LENGTH_SHORT).show();
-            editTextTarea.setText("");
+            editTextRecordatorio.setText("");
         } else {
             Toast.makeText(this, "Ingrese una tarea antes de guardar", Toast.LENGTH_SHORT).show();
         }
@@ -129,11 +158,15 @@ public class Recordatorio extends AppCompatActivity {
 
         class TareasViewHolder extends RecyclerView.ViewHolder {
             TextView textView;
+            TextView textViewTarea;
+            TextView textViewFecha;
+
             ImageView imageViewDelete;
 
             TareasViewHolder(View itemView) {
                 super(itemView);
-                textView = itemView.findViewById(R.id.textViewTarea);
+                textViewTarea = itemView.findViewById(R.id.textViewTarea);
+                textViewFecha = itemView.findViewById(R.id.textViewFecha); // Nuevo TextView para mostrar la fecha
                 imageViewDelete = itemView.findViewById(R.id.imageViewDelete);
                 imageViewDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -143,8 +176,12 @@ public class Recordatorio extends AppCompatActivity {
                 });
             }
 
-            void bind(String tarea) {
-                textView.setText(tarea);
+            void bind(String tareaConFecha) {
+                String[] partes = tareaConFecha.split("###");
+                String tarea = partes[0];
+                String fecha = partes[1];
+                textViewTarea.setText(tarea);
+                textViewFecha.setText(fecha); // Mostrar la fecha en el TextView correspondiente
             }
         }
     }

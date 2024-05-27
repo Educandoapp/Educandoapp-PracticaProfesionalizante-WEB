@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.educando.myapplication.api.ApiManager;
 import com.educando.myapplication.api.ApiService;
-import com.educando.myapplication.db.DbUsuarios;
+import com.educando.myapplication.api.UserSession;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,12 +23,16 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     EditText txtemail, txtpassword;
+    UserSession userSession;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Inicializar UserSession con el contexto de la actividad
+        userSession = UserSession.getInstance(this);
 
         txtemail = findViewById(R.id.emailLogin);
         txtpassword = findViewById(R.id.passwordLogin);
@@ -61,9 +65,9 @@ public class LoginActivity extends AppCompatActivity {
                             Usuario usuario = response.body();
                             Log.i("LoginActivity", "Inicio de sesión exitoso");
 
-                            // Guarda el token y los datos del usuario (deberías encriptarlos antes de guardarlos)
+                            // Guardar token en la sesión del usuario
                             String token = usuario.getToken();
-                            // Guardar token y usuario en SharedPreferences o donde sea necesario
+                            userSession.setAuthToken(token);
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -77,6 +81,16 @@ public class LoginActivity extends AppCompatActivity {
                         // Error en la solicitud HTTP, manejar el error
                     }
                 });
+            }
+        });
+
+        // Añadir el OnClickListener para el registro
+        TextView registerTextView = findViewById(R.id.registerLogin1);
+        registerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
     }

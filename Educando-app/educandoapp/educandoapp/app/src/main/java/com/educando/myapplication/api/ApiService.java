@@ -1,14 +1,17 @@
 package com.educando.myapplication.api;
 
+import com.educando.myapplication.Category;
 import com.educando.myapplication.Course;
 import com.educando.myapplication.Usuario;
 import com.google.gson.JsonObject;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -28,12 +31,23 @@ public interface ApiService {
     @POST("auth/validar_password/")
     Call<Usuario> validarPassword(@Body Usuario usuario);
 
-    // @POST("crear_usuario/")
-    // Call<Void> crearUsuario(@Body Usuario usuario);
+    @POST("registro/")
+    Call<RegisterResponse> registerUser(@Body RegisterRequest registerRequest);
+
+    // Nuevo método para obtener detalles del usuario
+    @POST("obtener-usuario/")
+    Call<Usuario> obtenerUsuario(@Body Map<String, String> token);
 
     // @PUT("actualizar_usuario/{id_usuario}/")
     // Call<Void> actualizarUsuario(@Path("id_usuario") int idUsuario, @Body Usuario usuario);
 
-    @GET("courses/") // El endpoint de la API para obtener la lista de cursos
+    @GET("cursos_por_categoria/{id_categoria}/")
+    Call<List<Course>> getCoursesByCategory(@Path("id_categoria") int idCategoria);
+
+    @GET("categorias/")
+    Call<List<Category>> getCategories();
+
+    // Nuevo método para obtener todos los cursos
+    @GET("cursos/")
     Call<List<Course>> getCourses();
 }

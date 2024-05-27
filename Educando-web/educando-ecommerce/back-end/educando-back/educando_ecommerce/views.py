@@ -26,6 +26,7 @@ class UsuarioView(viewsets.ViewSet):
     def create_user(self, request):
         # Validar los datos del serializer
         serializer = UsuarioSerializer(data=request.data)
+
         if serializer.is_valid():
             email = serializer.validated_data.get('email')
             password = serializer.validated_data.get('password')
@@ -169,18 +170,29 @@ class UsuarioDetailView(APIView):
 
 class ObtenerUsuarioView(APIView):
     def verificar_token(self, token):
+        # Registra el token recibido para depuración
+        print("Token recibido:", token)
+
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            print("Payload decodificado:", payload)
             usuario_id = payload.get('id_usuario')
             return usuario_id
         except jwt.ExpiredSignatureError:
+            print("Token expirado")
             raise AuthenticationFailed('Token expirado')
         except jwt.InvalidTokenError:
+            print("Token inválido")
             raise AuthenticationFailed('Token inválido')
 
     def post(self, request):
+        # Imprimir el cuerpo de la solicitud
+        print(request.data)  
         # Obtén el token del usuario desde el cuerpo de la solicitud
-        token = request.data.get('token')        
+        token = request.data.get('token')   
+
+        if not token:
+            return Response({'mensaje': 'Token no proporcionado'}, status=400)   
         
         # Verifica el token
         usuario_id = self.verificar_token(token)
