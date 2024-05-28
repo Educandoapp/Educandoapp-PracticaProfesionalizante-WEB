@@ -16,8 +16,10 @@ import android.widget.Toast;
 
 import com.educando.myapplication.api.ApiManager;
 import com.educando.myapplication.api.ApiService;
+import com.educando.myapplication.api.UserDetailsResponse;
 import com.educando.myapplication.api.UserSession;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Agregar log para verificar si se inicializaron los componentes de la UI correctamente
         Log.d(TAG, "UI components initialized successfully");
+
+        obtenerCategorias();
 
         //referencia al boton del mapa
         LinearLayout layoutUbicacion = findViewById(R.id.map);
@@ -104,14 +108,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Configuración del botón de abrir URL
+        // Obtén una referencia al botón "Abrir URL"
         Button openUrlButton = findViewById(R.id.button_compra);
+
+        // Configura un oyente de clic para el botón
         openUrlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://10.0.2.2:4200";
+                // Define la URL que deseas abrir
+                String url = "http://10.0.2.2:4200"; // Reemplaza con tu URL real
+
+                // Crea un intent para abrir la URL en un navegador web
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
+
             }
         });
     }
@@ -128,15 +138,18 @@ public class MainActivity extends AppCompatActivity {
         tokenMap.put("token", authToken);
 
         // Realizar la solicitud POST para obtener los detalles del usuario
-        Call<Usuario> call = apiService.obtenerUsuario(tokenMap);
-        call.enqueue(new Callback<Usuario>() {
+        Call<UserDetailsResponse> call = apiService.obtenerUsuario(tokenMap);
+        call.enqueue(new Callback<UserDetailsResponse>() {
             @Override
-            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+            public void onResponse(Call<UserDetailsResponse> call, Response<UserDetailsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // Obtener los detalles del usuario desde la respuesta
-                    Usuario usuario = response.body();
-                    String nombreCompleto = usuario.getNombre() + " " + usuario.getApellido();
+                    UserDetailsResponse userDetails = response.body();
+                    String nombreCompleto = userDetails.getNombre() + " " + userDetails.getApellido();
                     nombre_main.setText(nombreCompleto);
+
+                    // Guardar los detalles del usuario en SharedPreferences
+                    userSession.setUserSession(userDetails.getEmail(), userDetails.getNombre(), userDetails.getApellido(), authToken);
                 } else {
                     // Manejar el error de respuesta
                     int statusCode = response.code();
@@ -145,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Usuario> call, Throwable t) {
+            public void onFailure(Call<UserDetailsResponse> call, Throwable t) {
                 // Manejar el error de la solicitud HTTP
                 Toast.makeText(MainActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -153,23 +166,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        // recyclerViewCourse = findViewById(R.id.view);
-        //recyclerViewCourse.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewCourse = findViewById(R.id.view);
+        recyclerViewCourse.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Agregar log para verificar la inicialización del RecyclerView de cursos
         Log.d(TAG, "RecyclerView de cursos inicializado");
 
         // Obtener los cursos desde la API
-        // obtenerCursos();
+        obtenerCursos();
     }
 
     private void obtenerCursos() {
         ApiService apiService = ApiManager.getService();
-        // Obtener el token de autenticación de UserSession
-        String authToken = "Bearer " + userSession.getAuthToken();
-
-        // Imprimir el token antes de enviar la solicitud
-        Log.d("Token", authToken);
 
         Call<List<Course>> call = apiService.getCourses();
         call.enqueue(new Callback<List<Course>>() {
@@ -186,31 +194,28 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Curso: " + course.getName() + ", Descripción: " + course.getDescription());
                     }
 
-                    // Generar una lista de índices aleatorios
-                    List<Integer> randomIndices = generateRandomIndices(allCourses.size());
-                    Log.d(TAG, "Índices aleatorios generados: " + randomIndices.toString());
+                    // Verificar si hay suficientes cursos para seleccionar 6 aleatoriamente
+                    if (allCourses.size() >= 6) {
+                        // Generar una lista de índices aleatorios únicos
+                        List<Integer> randomIndices = generateRandomIndices(allCourses.size(), 6);
+                        Log.d(TAG, "Índices aleatorios generados: " + randomIndices.toString());
 
-                    // Seleccionar aleatoriamente un subconjunto de cursos
-                    List<Course> randomCourses = new ArrayList<>();
-                    for (int index : randomIndices) {
-                        randomCourses.add(allCourses.get(index));
+                        // Seleccionar aleatoriamente 6 cursos
+                        List<Course> randomCourses = new ArrayList<>();
+                        for (int index : randomIndices) {
+                            randomCourses.add(allCourses.get(index));
+                        }
+
+                        // Inicializar el adaptador con la lista de cursos aleatorios
+                        CourseAdapter adapter = new CourseAdapter(randomCourses);
+                        recyclerViewCourse.setAdapter(adapter);
+
+                        // Agregar log al inicializar el adaptador
+                        Log.d(TAG, "Adaptador de cursos inicializado con " + randomCourses.size() + " cursos");
+                    } else {
+                        // No hay suficientes cursos para seleccionar 6 aleatoriamente
+                        Toast.makeText(MainActivity.this, "No hay suficientes cursos disponibles", Toast.LENGTH_SHORT).show();
                     }
-
-                    // Convertir la lista de cursos a ArrayList<CourseDomain>
-                    ArrayList<CourseDomain> courseDomains = new ArrayList<>();
-                    for (Course course : randomCourses) {
-                        CourseDomain courseDomain = new CourseDomain();
-                        courseDomain.setTitle(course.getName());
-                        courseDomain.setDescription(course.getDescription());
-                        // Agregar el CourseDomain a la lista
-                        courseDomains.add(courseDomain);
-                    }
-                    // Inicializar el adaptador con la lista de cursos convertida
-                    adpterCourses = new CourseAdapter(courseDomains);
-                    recyclerViewCourse.setAdapter(adpterCourses);
-
-                    // Agregar log al inicializar el adaptador
-                    Log.d(TAG, "Adaptador de cursos inicializado con " + courseDomains.size() + " cursos");
 
                 } else {
 
@@ -235,31 +240,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Método para generar una lista de índices aleatorios
-    private List<Integer> generateRandomIndices(int size) {
-        List<Integer> randomIndices = new ArrayList<>();
+    private List<Integer> generateRandomIndices(int maxIndex, int count) {
+        List<Integer> indices = new ArrayList<>();
         Random random = new Random();
-        while (randomIndices.size() < 6) { // Define NUM_COURSES_TO_DISPLAY como el número de cursos que deseas mostrar
-            int randomIndex = random.nextInt(size);
-            if (!randomIndices.contains(randomIndex)) {
-                randomIndices.add(randomIndex);
+
+        // Generar 'count' índices aleatorios únicos
+        while (indices.size() < count) {
+            int index = random.nextInt(maxIndex);
+            if (!indices.contains(index)) {
+                indices.add(index);
             }
         }
 
-        // Agregar log para verificar los índices generados
-        Log.d(TAG, "Índices aleatorios generados: " + randomIndices.toString());
-
-        return randomIndices;
+        return indices;
     }
 
     private void setupCategoryRecyclerView() {
-        // recyclerViewCategory = findViewById(R.id.recycler_view_categories);
-        // recyclerViewCategory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewCategory = findViewById(R.id.recycler_view_categories);
+        recyclerViewCategory.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // Agregar log para verificar la inicialización del RecyclerView de categorías
         Log.d(TAG, "RecyclerView de categorías inicializado");
 
         // Obtener las categorías desde la API
-        // obtenerCategorias();
+        //obtenerCategorias();
     }
 
     private void obtenerCategorias() {
@@ -270,6 +274,14 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
 
+                    // Log para imprimir la respuesta completa del servidor
+                    Log.d(TAG, "Respuesta completa del servidor: " + response.toString());
+
+                    // Convertir la respuesta del servidor a JSON (cadena de texto)
+                    String jsonResponse = new Gson().toJson(response.body());
+                    Log.d(TAG, "Respuesta JSON del servidor: " + jsonResponse);
+
+
                     // Agregar log al recibir una respuesta exitosa
                     Log.d(TAG, "Respuesta exitosa al obtener categorías");
 
@@ -279,12 +291,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, "Categoría: " + category.getName());
                     }
 
-                    List<CategoryDomain> categoryDomainList = convertToCategoryDomainList(categoryList);
-                    categoryAdapter = new CategoryAdapter(new ArrayList<>(categoryDomainList));
+                    // Inicializar el adaptador con la lista de categorías directamente
+                    categoryAdapter = new CategoryAdapter(categoryList);
                     recyclerViewCategory.setAdapter(categoryAdapter);
 
                     // Agregar log al inicializar el adaptador
-                    Log.d(TAG, "Adaptador de categorías inicializado con " + categoryDomainList.size() + " categorías");
+                    Log.d(TAG, "Adaptador de categorías inicializado con " + categoryList.size() + " categorías");
 
                 } else {
 
@@ -306,21 +318,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private List<CategoryDomain> convertToCategoryDomainList(List<Category> categoryList) {
-        List<CategoryDomain> categoryDomainList = new ArrayList<>();
-        for (Category category : categoryList) {
-            // Aquí deberías obtener la referencia de la imagen de la categoría
-            // Puedes obtenerla de la respuesta del backend o de otro lugar según tu implementación
-            String imageResource = ""; // Aquí establece la referencia de la imagen según la lógica de tu aplicación
-            CategoryDomain categoryDomain = new CategoryDomain(category.getName(), imageResource);
-            categoryDomainList.add(categoryDomain);
-        }
-
-        // Agregar log para verificar la conversión de categorías
-        Log.d(TAG, "Convertidos " + categoryDomainList.size() + " categorías a CategoryDomain");
-
-        return categoryDomainList;
     }
 }

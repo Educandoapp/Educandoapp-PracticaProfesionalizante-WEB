@@ -15,32 +15,36 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    ArrayList<CategoryDomain> categories;
+    private List<Category> categories;
     Context context;
 
-    public CategoryAdapter(ArrayList<CategoryDomain> categories) {
+    public CategoryAdapter(List<Category> categories) {
         this.categories = categories;
     }
 
     @NonNull
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_category, parent, false);
         context = parent.getContext();
-        return new CategoryAdapter.ViewHolder(inflate);
+        return new ViewHolder(inflate);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.title_categoryTxt.setText(categories.get(position).getCategoryName());
-        int drawableResourceId = holder.itemView.getResources().getIdentifier(categories.get(position).getImageResourceId(),
-                "drawable", holder.itemView.getContext().getPackageName());
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        Category category = categories.get(position);
+        holder.title_categoryTxt.setText(category.getName());
 
-        Glide.with(holder.itemView.getContext())
-                .load(drawableResourceId)
+        // Obtener la URL de la imagen de la categoría
+        String imageUrl = category.getImageUrl();
+
+        // Cargar la imagen desde la URL usando Glide
+        Glide.with(context)
+                .load(imageUrl)
                 .into(holder.pic);
     }
 
@@ -65,11 +69,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                     // Obtén la categoría seleccionada
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        CategoryDomain selectedCategory = categories.get(position);
+                        Category selectedCategory = categories.get(position);
 
                         // Inicia la nueva actividad y pasa la categoría seleccionada como parámetro
                         Intent intent = new Intent(context, CategoryCourseActivity.class);
-                        intent.putExtra("categoryName", selectedCategory.getCategoryName());
+                        intent.putExtra("categoryName", selectedCategory.getName());
                         context.startActivity(intent);
                     }
                 }

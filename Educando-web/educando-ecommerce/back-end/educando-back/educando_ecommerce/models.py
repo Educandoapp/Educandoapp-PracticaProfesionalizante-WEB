@@ -72,6 +72,7 @@ class Categoria(models.Model):
     id_categoria = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=45, null=True)
     descripcion = models.CharField(max_length=250, null=True)
+    categoria_imagen_url = models.URLField(null=True,max_length=2000)
     class Meta:
         db_table = 'categoria'
         verbose_name = 'Categoria de curso'
@@ -162,8 +163,10 @@ class ForoRespuesta(models.Model):
 class Contacto(models.Model):
     id_contacto = models.AutoField(primary_key=True,default=None)  
     email = models.CharField(max_length=250, null=True)
+    titulo = models.CharField(max_length=100, null=True)
     nombre = models.CharField(max_length=80, null=True)
     mensaje = models.CharField(max_length=500, null=True)
+    fecha_mensaje = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'contacto'

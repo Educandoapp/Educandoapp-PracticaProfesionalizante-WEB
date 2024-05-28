@@ -2,6 +2,7 @@ package com.educando.myapplication;
 
 import static com.educando.myapplication.R.id.back_account;
 import static com.educando.myapplication.R.id.go_historial;
+import static com.educando.myapplication.R.id.go_inicio;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,12 +16,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.educando.myapplication.db.DbUsuarios;
+import com.educando.myapplication.api.ApiManager;
+import com.educando.myapplication.api.ApiService;
+import com.educando.myapplication.api.ContactRequest;
+import com.educando.myapplication.api.ContactResponse;
+import com.educando.myapplication.api.UserSession;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ContactActivity extends AppCompatActivity {
 
     private EditText txttitle;
     private EditText txtBlock;
+    private UserSession userSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,8 @@ public class ContactActivity extends AppCompatActivity {
         // Obtén referencias a los campos
         txttitle = findViewById(R.id.txttitle);
         txtBlock = findViewById(R.id.txtBlock);
+
+        userSession = UserSession.getInstance(this);
 
         // Obtén referencias a los botones
         Button enviarButton = findViewById(R.id.btnEnviar);
@@ -44,9 +56,18 @@ public class ContactActivity extends AppCompatActivity {
             }
         });
 
+        LinearLayout inicio = findViewById(go_inicio);
+        inicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí escribirás el código para iniciar la MainActivity
+                Intent intent = new Intent(ContactActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         LinearLayout cuenta = findViewById(back_account);
         cuenta.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // Aquí escribirás el código para iniciar la Main Activity
@@ -78,31 +99,49 @@ public class ContactActivity extends AppCompatActivity {
         } else {
             // Realizar el envío del mensaje aquí, si es necesario
             // Luego, inserta el mensaje en la base de datos
-            insertPost(titulo, mensaje);
+            enviarMensajeAlBackend(titulo, mensaje);
         }
     }
 
-    private void insertPost(String titulo, String mensaje) {
-        // Obtener el usuario logueado
-        DbUsuarios dbUsuarios = new DbUsuarios(this);
-        Usuario usuarioLogueado = dbUsuarios.obtenerUsuarioLogueado();
+    private void enviarMensajeAlBackend(String titulo, String mensaje) {
+        String email = userSession.getUserEmail();
+        String nombre = userSession.getUserFirstName();
+        String apellido = userSession.getUserLastName();
 
-        if (usuarioLogueado != null) {
-            // Insertar en la tabla Contacto
-            long idContacto = dbUsuarios.insertarPost(usuarioLogueado.getId_usuario(), titulo, mensaje);
+        // Verificar si el email y el nombre del usuario no son nulos antes de enviar el mensaje al backend
+        if (email != null && nombre != null && apellido != null) {
+            // Crear una instancia de ContactRequest con el email, nombre y mensaje
+            ContactRequest contactRequest = new ContactRequest(email, nombre + " " + apellido, titulo, mensaje);
 
-            if (idContacto > 0) {
-                // Mensaje enviado con éxito
-                mostrarMensajeEnviado();
-            } else {
-                // Error al insertar el mensaje
-                Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show();
-            }
+            // Obtener una instancia de ApiService a través de ApiManager
+            ApiService apiService = ApiManager.getService();
+
+            // Realizar la llamada al endpoint para enviar el mensaje de contacto
+            Call<ContactResponse> call = apiService.enviarContacto(userSession.getAuthToken(), contactRequest);
+            call.enqueue(new Callback<ContactResponse>() {
+                @Override
+                public void onResponse(Call<ContactResponse> call, Response<ContactResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        // Mostrar un mensaje de éxito si el mensaje se envió correctamente
+                        mostrarMensajeEnviado();
+                    } else {
+                        // Mostrar un mensaje de error si hubo algún problema al enviar el mensaje
+                        Toast.makeText(ContactActivity.this, "Error al enviar el mensaje de contacto.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ContactResponse> call, Throwable t) {
+                    // Mostrar un mensaje de error si ocurrió un fallo en la conexión
+                    Toast.makeText(ContactActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
-            // No se pudo obtener el usuario logueado
-            Toast.makeText(this, "Usuario no logueado", Toast.LENGTH_SHORT).show();
+            // Mostrar un mensaje de error si el email o el nombre del usuario son nulos
+            Toast.makeText(ContactActivity.this, "Error: no se pudo obtener el email o el nombre del usuario.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void mostrarMensajeEnviado() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

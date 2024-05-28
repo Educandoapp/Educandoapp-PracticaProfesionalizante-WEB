@@ -7,6 +7,9 @@ public class UserSession {
     private SharedPreferences sharedPreferences;
     private static final String PREF_NAME = "UserSession";
     private static final String KEY_AUTH_TOKEN = "authToken";
+    private static final String KEY_USER_EMAIL = "userEmail";
+    private static final String KEY_USER_FIRST_NAME = "userFirstName";
+    private static final String KEY_USER_LAST_NAME = "userLastName";
     private static UserSession instance;
 
     private UserSession(Context context) {
@@ -37,6 +40,64 @@ public class UserSession {
     public void clearAuthToken() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(KEY_AUTH_TOKEN);
+        editor.apply();
+    }
+
+    // Método para guardar el correo electrónico del usuario en SharedPreferences
+    public void setUserEmail(String userEmail) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USER_EMAIL, userEmail);
+        editor.apply();
+    }
+
+    // Método para obtener el correo electrónico del usuario desde SharedPreferences
+    public String getUserEmail() {
+        return sharedPreferences.getString(KEY_USER_EMAIL, null);
+    }
+
+    // Método para borrar el correo electrónico del usuario al cerrar sesión
+    public void clearUserEmail() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(KEY_USER_EMAIL);
+        editor.apply();
+    }
+
+    // Método para guardar el nombre y apellido del usuario en SharedPreferences
+    public void setUserDetails(String userEmail, String userFirstName, String userLastName) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USER_EMAIL, userEmail);
+        editor.putString(KEY_USER_FIRST_NAME, userFirstName);
+        editor.putString(KEY_USER_LAST_NAME, userLastName);
+        editor.apply();
+    }
+
+    // Método para obtener el nombre del usuario desde SharedPreferences
+    public String getUserFirstName() {
+        return sharedPreferences.getString(KEY_USER_FIRST_NAME, null);
+    }
+
+    // Método para obtener el apellido del usuario desde SharedPreferences
+    public String getUserLastName() {
+        return sharedPreferences.getString(KEY_USER_LAST_NAME, null);
+    }
+
+    // Método para borrar el correo electrónico del usuario al cerrar sesión y borrar el token de autenticación
+    public void clearUserSession() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(KEY_USER_EMAIL);
+        editor.remove(KEY_USER_FIRST_NAME);
+        editor.remove(KEY_USER_LAST_NAME);
+        editor.remove(KEY_AUTH_TOKEN);
+        editor.apply();
+    }
+
+    // Método para guardar el correo electrónico, nombre y apellido del usuario en SharedPreferences
+    public void setUserSession(String userEmail, String userFirstName, String userLastName, String authToken) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USER_EMAIL, userEmail);
+        editor.putString(KEY_USER_FIRST_NAME, userFirstName);
+        editor.putString(KEY_USER_LAST_NAME, userLastName);
+        editor.putString(KEY_AUTH_TOKEN, authToken);
         editor.apply();
     }
 }

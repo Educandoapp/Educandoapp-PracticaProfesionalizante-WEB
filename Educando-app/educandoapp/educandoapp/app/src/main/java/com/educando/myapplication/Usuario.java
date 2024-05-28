@@ -7,6 +7,7 @@ public class Usuario {
     private String email;
     private String password;
     private String token;
+    private int cantidadCursos;
 
     public Usuario(int id_usuario, String nombre, String apellido, String email, String password) {
         this.id_usuario = id_usuario;
@@ -76,5 +77,13 @@ public class Usuario {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getCantidadCursos() {
+        return cantidadCursos;
+    }
+
+    public void setCantidadCursos(int cantidadCursos) {
+        this.cantidadCursos = cantidadCursos;
     }
 }

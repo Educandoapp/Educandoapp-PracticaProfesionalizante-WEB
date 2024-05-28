@@ -1,17 +1,26 @@
 package com.educando.myapplication;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.educando.myapplication.api.ContactResponse;
+
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
-public class MensajesAdapter extends RecyclerView.Adapter<MensajesAdapter.MensajeViewHolder> {
-    private List<Contacto> mensajes;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-    public MensajesAdapter(List<Contacto> mensajes) {
+public class MensajesAdapter extends RecyclerView.Adapter<MensajesAdapter.MensajeViewHolder> {
+    private List<ContactResponse> mensajes;
+
+    public MensajesAdapter(List<ContactResponse> mensajes) {
         this.mensajes = mensajes;
     }
 
@@ -24,11 +33,38 @@ public class MensajesAdapter extends RecyclerView.Adapter<MensajesAdapter.Mensaj
 
     @Override
     public void onBindViewHolder(@NonNull MensajeViewHolder holder, int position) {
-        Contacto mensaje = mensajes.get(position);
+        ContactResponse mensaje = mensajes.get(position);
 
-        holder.tituloTextView.setText(mensaje.getTitulo());
-        holder.mensajeTextView.setText(mensaje.getMensaje());
-        holder.fechaTextView.setText(mensaje.getFecha());
+        Log.d("FechaMensaje", "Fecha del mensaje en adaptador: " + mensaje.getFecha());
+
+        // Verifica si el título y mensaje son null y asigna un valor predeterminado en su lugar
+        String titulo = mensaje.getTitulo() != null ? mensaje.getTitulo() : "Sin título";
+        String mensajeTexto = mensaje.getMensaje() != null ? mensaje.getMensaje() : "Mensaje vacío";
+
+        holder.tituloTextView.setText(titulo);
+        holder.mensajeTextView.setText(mensajeTexto);
+
+        // Parsear y mostrar la fecha usando DateTimeFormatter
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        String fechaString = String.valueOf(mensaje.getFecha());
+        if (fechaString != null) {
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(fechaString, inputFormatter);
+                String formattedDate = dateTime.format(outputFormatter);
+                holder.fechaTextView.setText(formattedDate);
+                Log.d("FechaMensaje", "Fecha del mensaje después del parseo y formateo: " + formattedDate);
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+                Log.e("FechaMensaje", "Error al parsear la fecha: " + e.getMessage());
+                holder.fechaTextView.setText("Fecha inválida");
+            }
+        } else {
+            Log.e("FechaMensaje", "La fecha del mensaje es nula.");
+            holder.fechaTextView.setText("Fecha inválida");
+        }
     }
 
     @Override
@@ -37,7 +73,7 @@ public class MensajesAdapter extends RecyclerView.Adapter<MensajesAdapter.Mensaj
     }
 
     // Esta función te permitirá actualizar los mensajes en el adaptador
-    public void setMensajes(List<Contacto> nuevosMensajes) {
+    public void setMensajes(List<ContactResponse> nuevosMensajes) {
         mensajes.clear();
         mensajes.addAll(nuevosMensajes);
         notifyDataSetChanged();

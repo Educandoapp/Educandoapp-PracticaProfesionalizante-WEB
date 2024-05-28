@@ -1,33 +1,43 @@
 package com.educando.myapplication;
 
-
 import static com.educando.myapplication.R.id.acc_go_main;
 import static com.educando.myapplication.R.id.acc_go_cursos;
 import static com.educando.myapplication.R.id.acc_go_recordatorios;
 
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.educando.myapplication.db.DbHelper;
-import com.educando.myapplication.db.DbUsuarios;
+import com.bumptech.glide.Glide;
+import com.educando.myapplication.api.ApiClient;
+import com.educando.myapplication.api.ApiService;
+import com.educando.myapplication.api.UserDetailsResponse;
+import com.educando.myapplication.api.UserSession;
+import com.educando.myapplication.api.UsuarioCursosResponse;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountActivity extends AppCompatActivity {
 
     TextView nombreTextView, apellidoTextView, emailTextView, cursosTextView, changePassButton;
     Button disconectButton;
-    DbUsuarios dbUsuarios;
-    DbHelper dbHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,128 +48,16 @@ public class AccountActivity extends AppCompatActivity {
         apellidoTextView = findViewById(R.id.acc_apellido_b);
         emailTextView = findViewById(R.id.acc_email_b);
         cursosTextView = findViewById(R.id.acc_curso_b);
-        dbUsuarios = new DbUsuarios(this);
-        dbHelper = new DbHelper(this);
 
-        // Obtén el usuario logueado desde la base de datos local (SQLite)
-        Usuario usuario = dbUsuarios.obtenerUsuarioLogueado();
+        // Obtener el token de autenticación usando UserSession
+        String authToken = UserSession.getInstance(this).getAuthToken();
 
-        if (usuario != null) {
-            // Los datos del usuario están disponibles
-            String nombre = usuario.getNombre();
-            String apellido = usuario.getApellido();
-            final int idUsuario = usuario.getId_usuario();
-
-            nombreTextView.setText(nombre);
-            apellidoTextView.setText(apellido);
-            emailTextView.setText(usuario.getEmail());
-
-            // Obtén la cantidad de cursos del usuario desde la base de datos usando el id_usuario
-            int cantidadCursos = obtenerCantidadDeCursos(idUsuario);
-            cursosTextView.setText("Cantidad de cursos: " + cantidadCursos);
-
-            // Configura el OnClickListener para el botón de cambiar contraseña
-            changePassButton = findViewById(R.id.change_pass);
-            changePassButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Redirige al usuario a la actividad ChangePassActivity
-                    Intent intent = new Intent(AccountActivity.this, ChangePassActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-            // Configura el OnClickListener para el botón "Desconectar" (nuevo botón)
-            disconectButton = findViewById(R.id.disconect);
-            disconectButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Actualiza el estado de logueado a 0 (falso) al desconectar
-                    boolean actualizado = dbUsuarios.actualizarEstadoLogueado(usuario.getEmail(), 0);
-
-                    if (actualizado) {
-                        // Redirigir al usuario a la actividad IntroActivity
-                        Intent intent = new Intent(AccountActivity.this, IntroActivity.class);
-                        startActivity(intent);
-                        finish(); // Cierra esta actividad si el usuario se desconecta
-                    } else {
-                        Toast.makeText(AccountActivity.this, "Error al actualizar el estado de inicio de sesión", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            // Configura el OnClickListener para el botón "Contacto" (nuevo botón)
-            LinearLayout contactButton = findViewById(R.id.contact);
-            contactButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Redirige al usuario a la actividad ContactActivity
-                    Intent intent = new Intent(AccountActivity.this, ContactActivity.class);
-                    startActivity(intent);
-                }
-            });
-
-            LinearLayout inicio = findViewById(acc_go_main);
-            inicio.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // Aquí escribirás el código para iniciar la Main Activity
-                    Intent intent = new Intent(AccountActivity.this, MainActivity.class);
-                    startActivity(intent);
-
-                }
-            });
-            LinearLayout Recordatorios = findViewById(acc_go_recordatorios);
-            Recordatorios.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(AccountActivity.this, Recordatorio.class);
-                    startActivity(intent);
-                }
-            });
-
-            LinearLayout cursos = findViewById(acc_go_cursos);
-            cursos.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // Aquí escribirás el código para iniciar la Main Activity
-                    Intent intent = new Intent(AccountActivity.this, MyCourseActivity.class);
-                    startActivity(intent);
-
-                }
-            });
-
-            // Obtén una referencia al botón "Abrir URL"
-            LinearLayout openUrlButton = findViewById(R.id.buy_course);
-
-            // Configura un oyente de clic para el botón
-            openUrlButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Define la URL que deseas abrir
-                    String url = "https://www.google.com"; // Reemplaza con tu URL real
-
-                    // Crea un intent para abrir la URL en un navegador web
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-
-                    // Verifica si hay una aplicación para manejar la acción de abrir la URL
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        // Abre la URL en un navegador web
-                        startActivity(intent);
-                    } else {
-                        // No se encontró una aplicación para manejar la acción
-                        // Puedes mostrar un mensaje de error o manejarlo como prefieras
-                        Toast.makeText(AccountActivity.this, "No se puede abrir la URL. Instala un navegador web.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
+        if (authToken != null) {
+            // El token de autenticación está disponible, podemos usarlo para realizar solicitudes al servidor
+            obtenerDetallesUsuario(authToken);
+            // obtenerMisCursos(authToken); // Llamar al método para obtener los cursos del usuario
         } else {
-            // No se encontró un usuario logueado, puedes manejarlo como prefieras
-            // Por ejemplo, redirigiendo a la pantalla de inicio de sesión
+            // El token de autenticación no está disponible, redirigir al usuario a iniciar sesión nuevamente
             Toast.makeText(AccountActivity.this, "Usuario no encontrado. Por favor, inicie sesión nuevamente.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -167,25 +65,177 @@ public class AccountActivity extends AppCompatActivity {
         }
     }
 
-    private int obtenerCantidadDeCursos(int idUsuario) {
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
-        int cantidad = 0;
+    private void obtenerDetallesUsuario(String authToken) {
+        // Crear una instancia del servicio API utilizando Retrofit
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-        if (database != null) {
-            // Realiza una consulta para contar la cantidad de cursos asignados al usuario
-            String query = "SELECT COUNT(*) FROM " + DbHelper.TABLE_INTER_CUR_USER + " WHERE id_usuario = ?";
-            Cursor cursor = database.rawQuery(query, new String[]{String.valueOf(idUsuario)});
+        // Crear un mapa para almacenar el token de autenticación
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", authToken);
 
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    cantidad = cursor.getInt(0);
+        // Realizar la solicitud para obtener los detalles del usuario
+        Call<UserDetailsResponse> callUsuario = apiService.obtenerUsuario(tokenMap);
+        callUsuario.enqueue(new Callback<UserDetailsResponse>() {
+            @Override
+            public void onResponse(Call<UserDetailsResponse> call, Response<UserDetailsResponse> response) {
+                if (response.isSuccessful()) {
+                    // Los detalles del usuario se obtuvieron con éxito
+                    UserDetailsResponse userDetails = response.body();
+                    if (userDetails != null) {
+                        // Actualizar la interfaz de usuario con los detalles del usuario obtenidos
+                        actualizarInterfazUsuario(userDetails);
+                    }
+                } else {
+                    // Error al obtener los detalles del usuario
+                    // Manejar el error según sea necesario
+                    Toast.makeText(AccountActivity.this, "Error al obtener los detalles del usuario.", Toast.LENGTH_SHORT).show();
                 }
-                cursor.close();
             }
 
-            database.close();
-        }
+            @Override
+            public void onFailure(Call<UserDetailsResponse> call, Throwable t) {
+                // Error de red o de servidor al obtener los detalles del usuario
+                // Manejar el error según sea necesario
+                Toast.makeText(AccountActivity.this, "Error de red o de servidor al obtener los detalles del usuario.", Toast.LENGTH_SHORT).show();
+                // Log.e("Error de red o de servidor", "Error al obtener los detalles del usuario: " + t.getMessage(), t);
+            }
+        });
 
-        return cantidad;
+        // Realizar la solicitud para obtener los cursos del usuario
+        Call<List<UsuarioCursosResponse.CursoUsuario>> callCursos = apiService.obtenerUsuarioCursos(tokenMap);
+        callCursos.enqueue(new Callback<List<UsuarioCursosResponse.CursoUsuario>>() {
+            @Override
+            public void onResponse(Call<List<UsuarioCursosResponse.CursoUsuario>> call, Response<List<UsuarioCursosResponse.CursoUsuario>> response) {
+                if (response.isSuccessful()) {
+                    // Los cursos del usuario se obtuvieron con éxito
+                    List<UsuarioCursosResponse.CursoUsuario> cursos = response.body();
+                    if (cursos != null) {
+
+                        // Obtener el total de cursos
+                        int totalCursos = cursos.size();
+
+                        // Actualizar la interfaz de usuario con los cursos del usuario obtenidos
+                        actualizarInterfazCursos(totalCursos);
+                    }
+                } else {
+                    // Error al obtener los cursos del usuario
+                    // Manejar el error según sea necesario
+                    Toast.makeText(AccountActivity.this, "Error al obtener los cursos del usuario.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UsuarioCursosResponse.CursoUsuario>> call, Throwable t) {
+                // Error de red o de servidor al obtener los cursos del usuario
+                // Manejar el error según sea necesario
+                Toast.makeText(AccountActivity.this, "Error de red o de servidor al obtener los cursos del usuario.", Toast.LENGTH_SHORT).show();
+                Log.e("Error de red o de servidor", "Error al obtener los cursos del usuario: " + t.getMessage(), t);
+            }
+        });
     }
+
+    private void actualizarInterfazUsuario(UserDetailsResponse userDetails) {
+        // Actualizar la interfaz de usuario con los detalles del usuario obtenidos
+        nombreTextView.setText(userDetails.getNombre());
+        apellidoTextView.setText(userDetails.getApellido());
+        emailTextView.setText(userDetails.getEmail());
+
+        // Agregar un log para verificar la URL de la imagen
+        Log.d("URL_IMAGEN", "URL de la imagen: " + userDetails.getUrlImagen());
+
+        // Cargar la imagen de perfil utilizando Glide
+        ImageView profileImageView = findViewById(R.id.imageView); // Cambia el ID según corresponda
+        String urlImagen = userDetails.getUrlImagen();
+        Glide.with(this)
+                .load(urlImagen)
+                .placeholder(R.drawable.name) // Imagen de placeholder mientras se carga la imagen
+                .error(R.drawable.name) // Imagen de fallback en caso de error al cargar la imagen
+                .into(profileImageView);
+
+        // Configura el OnClickListener para el botón de cambiar contraseña
+        changePassButton = findViewById(R.id.change_pass);
+        changePassButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Redirige al usuario a la actividad ChangePassActivity
+                Intent intent = new Intent(AccountActivity.this, ChangePassActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Configura el OnClickListener para el botón "Desconectar"
+        disconectButton = findViewById(R.id.disconect);
+        disconectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cierra la sesión y redirige al usuario a la pantalla de inicio de sesión
+                UserSession.getInstance(AccountActivity.this).clearUserSession();
+                Intent intent = new Intent(AccountActivity.this, IntroActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // Configura el OnClickListener para el botón "Contacto"
+        LinearLayout contactButton = findViewById(R.id.contact);
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Redirige al usuario a la actividad ContactActivity
+                Intent intent = new Intent(AccountActivity.this, ContactActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        LinearLayout inicio = findViewById(acc_go_main);
+        inicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí escribirás el código para iniciar la Main Activity
+                Intent intent = new Intent(AccountActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        LinearLayout Recordatorios = findViewById(acc_go_recordatorios);
+        Recordatorios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccountActivity.this, Recordatorio.class);
+                startActivity(intent);
+            }
+        });
+
+        LinearLayout cursos = findViewById(acc_go_cursos);
+        cursos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Aquí escribirás el código para iniciar la Main Activity
+                Intent intent = new Intent(AccountActivity.this, MyCourseActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Obtén una referencia al botón "Abrir URL"
+        LinearLayout openUrlButton = findViewById(R.id.buy_course);
+
+        // Configura un oyente de clic para el botón
+        openUrlButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Define la URL que deseas abrir
+                String url = "http://10.0.2.2:4200"; // Reemplaza con tu URL real
+
+                // Crea un intent para abrir la URL en un navegador web
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void actualizarInterfazCursos(int totalCursos) {
+        // Actualiza la interfaz con el total de cursos obtenidos
+        String cursosText = "Total de cursos: " + totalCursos;
+        cursosTextView.setText(cursosText);
+    }
+
 }

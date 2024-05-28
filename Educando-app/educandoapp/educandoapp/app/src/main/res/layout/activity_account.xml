@@ -40,15 +40,27 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <ImageView
+                        android:id="@+id/circleImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="32dp"
+                        android:src="@drawable/circle_background"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_marginTop="32dp"
                         android:contentDescription="Imagen de perfil"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/profile" />
+                        android:background="@drawable/circle_background"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/name" />
 
                     <TextView
                         android:id="@+id/textView"

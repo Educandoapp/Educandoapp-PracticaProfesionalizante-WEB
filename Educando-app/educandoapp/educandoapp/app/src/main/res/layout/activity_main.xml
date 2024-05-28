@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/blue_background">
 
@@ -123,7 +123,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
@@ -144,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="8dp"
                 android:orientation="horizontal">
 
@@ -163,7 +163,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
@@ -200,16 +200,19 @@
         android:layout_margin="16dp"
         android:src="@drawable/whatsapp_icon"
         android:contentDescription="Botón de WhatsApp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:backgroundTint="#008000" />
+        app:backgroundTint="#008000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar_container" />
 
+    <!-- BottomAppBar -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bottom_app_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView3">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"

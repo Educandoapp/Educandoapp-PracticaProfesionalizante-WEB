@@ -14,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     // Define los métodos para las operaciones de tu API
@@ -25,18 +26,18 @@ public interface ApiService {
     @POST("login/")
     Call<Usuario> iniciarSesion(@Body Usuario usuario);
 
-    @GET("usuario/{id_usuario}/")
-    Call<Usuario> obtenerUsuarioPorId(@Path("id_usuario") int idUsuario);
+    //@GET("usuario/{id_usuario}/")
+    // Call<Usuario> obtenerUsuarioPorId(@Path("id_usuario") int idUsuario);
 
-    @POST("auth/validar_password/")
-    Call<Usuario> validarPassword(@Body Usuario usuario);
+    // @POST("auth/validar_password/")
+    //Call<Usuario> validarPassword(@Body Usuario usuario);
 
     @POST("registro/")
     Call<RegisterResponse> registerUser(@Body RegisterRequest registerRequest);
 
     // Nuevo método para obtener detalles del usuario
     @POST("obtener-usuario/")
-    Call<Usuario> obtenerUsuario(@Body Map<String, String> token);
+    Call<UserDetailsResponse> obtenerUsuario(@Body Map<String, String> token);
 
     // @PUT("actualizar_usuario/{id_usuario}/")
     // Call<Void> actualizarUsuario(@Path("id_usuario") int idUsuario, @Body Usuario usuario);
@@ -44,10 +45,18 @@ public interface ApiService {
     @GET("cursos_por_categoria/{id_categoria}/")
     Call<List<Course>> getCoursesByCategory(@Path("id_categoria") int idCategoria);
 
+    @POST("mis_cursos/")
+    Call<List<UsuarioCursosResponse.CursoUsuario>> obtenerUsuarioCursos(@Body Map<String, String> token);
+
     @GET("categorias/")
     Call<List<Category>> getCategories();
 
-    // Nuevo método para obtener todos los cursos
     @GET("cursos/")
     Call<List<Course>> getCourses();
+
+    @POST("contacto/")
+    Call<ContactResponse> enviarContacto(@Header("Authorization") String token, @Body ContactRequest contactRequest);
+
+    @GET("contactos/")
+    Call<List<ContactResponse>> obtenerContactos(@Query("email") String email);
 }

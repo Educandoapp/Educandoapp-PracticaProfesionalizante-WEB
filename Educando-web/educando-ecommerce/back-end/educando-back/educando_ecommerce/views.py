@@ -1,7 +1,7 @@
 from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer
 from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
 from rest_framework import viewsets, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
@@ -171,23 +171,23 @@ class UsuarioDetailView(APIView):
 class ObtenerUsuarioView(APIView):
     def verificar_token(self, token):
         # Registra el token recibido para depuración
-        print("Token recibido:", token)
+        # print("Token recibido:", token)
 
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            print("Payload decodificado:", payload)
+            # print("Payload decodificado:", payload)
             usuario_id = payload.get('id_usuario')
             return usuario_id
         except jwt.ExpiredSignatureError:
-            print("Token expirado")
+            # print("Token expirado")
             raise AuthenticationFailed('Token expirado')
         except jwt.InvalidTokenError:
-            print("Token inválido")
+            # print("Token inválido")
             raise AuthenticationFailed('Token inválido')
 
     def post(self, request):
         # Imprimir el cuerpo de la solicitud
-        print(request.data)  
+        # print(request.data)  
         # Obtén el token del usuario desde el cuerpo de la solicitud
         token = request.data.get('token')   
 
@@ -420,8 +420,24 @@ class ContactoView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        print("Datos recibidos en el backend:", request.data)
         serializer = ContactoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print("Mensaje de contacto guardado exitosamente.")
             return Response({'mensaje': '¡Gracias por ponerte en contacto con nosotros!'}, status=status.HTTP_201_CREATED)
+        print("Errores de validación en el serializer:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ContactoListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        email = request.query_params.get('email')
+        print("Email recibido en la solicitud:", email)
+        if email:
+            contactos = Contacto.objects.filter(email=email)
+            serializer = ContactoSerializer(contactos, many=True)
+            print("Datos enviados en la respuesta:", serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'error': 'Email parameter is required'}, status=status.HTTP_400_BAD_REQUEST)

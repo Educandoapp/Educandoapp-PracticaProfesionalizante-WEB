@@ -154,7 +154,7 @@ public class MyCourseActivity extends AppCompatActivity {
                     @SuppressLint("Range") String descripcion = cursor.getString(cursor.getColumnIndex("descripcion"));
 
                     // Crea un objeto Course y agrégalo a la lista
-                    Course course = new Course(nombre, descripcion);
+                    Course course = new Course(nombre, descripcion, 0, 0, 0.0f, null);
 
                     // Agrega el curso a la lista de cursos del usuario
                     courses.add(course);

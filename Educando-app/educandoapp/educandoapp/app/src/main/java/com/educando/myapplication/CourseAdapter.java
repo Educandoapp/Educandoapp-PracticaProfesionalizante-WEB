@@ -1,5 +1,7 @@
 package com.educando.myapplication;
 
+import static com.educando.myapplication.R.id.pic;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
-    ArrayList<CourseDomain> items;
+    private List<Course> courses;
     DecimalFormat formatter;
     Context context;
 
-    public CourseAdapter(ArrayList<CourseDomain> items) {
-        this.items = items;
+    public CourseAdapter(List<Course> courses) {
+        this.courses = courses;
         formatter = new DecimalFormat("###,###,###,###.##");
     }
 
@@ -37,35 +39,50 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CourseAdapter.ViewHolder holder, int position) {
-        holder.titleTxt.setText(items.get(position).getTitle());
-        holder.ownerTxt.setText(items.get(position).getOwner());
-        holder.priceTxt.setText("$" + formatter.format(items.get(position).getPrice()));
-        holder.timeTxt.setText(items.get(position).getTime());
-
-        int drawableResourceId = holder.itemView.getResources().getIdentifier(items.get(position).getPicPath(),
-                "drawable", holder.itemView.getContext().getPackageName());
+        Course course = courses.get(position);
+        holder.titleTxt.setText(course.getName());
+        // Limita la descripción a las primeras cinco palabras y agrega puntos suspensivos si es necesario
+        holder.descriptionTxt.setText(limitDescription(course.getDescription()));
+        holder.priceTxt.setText("$" + formatter.format(course.getPrice()));
+        holder.durationTxt.setText(String.valueOf(course.getDuration()) + " horas");
+        // holder.ratingTxt.setText(String.valueOf(course.getRating()));
 
         Glide.with(holder.itemView.getContext())
-                .load(drawableResourceId)
+                .load(course.getImageUrl())
                 .into(holder.pic);
+    }
+
+    // Método para limitar la descripción a las primeras cinco palabras y agregar puntos suspensivos si es necesario
+    private String limitDescription(String description) {
+        String[] words = description.split("\\s+");
+        if (words.length > 5) {
+            StringBuilder limitedDescription = new StringBuilder();
+            for (int i = 0; i < 5; i++) {
+                limitedDescription.append(words[i]).append(" ");
+            }
+            return limitedDescription.toString().trim() + "...";
+        } else {
+            return description;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return courses.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView titleTxt, ownerTxt, priceTxt, timeTxt;
+        TextView titleTxt, descriptionTxt, priceTxt, durationTxt, ratingTxt;
         ImageView pic;
         ImageButton favoriteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTxt = itemView.findViewById(R.id.titleTxt);
-            ownerTxt = itemView.findViewById(R.id.ownerTxt);
+            descriptionTxt = itemView.findViewById(R.id.ownerTxt);
             priceTxt = itemView.findViewById(R.id.precioTxt);
-            timeTxt = itemView.findViewById(R.id.timetxt);
+            durationTxt = itemView.findViewById(R.id.timetxt);
+            // ratingTxt = itemView.findViewById(R.id.ratingTxt);
             pic = itemView.findViewById(R.id.pic);
             favoriteButton = itemView.findViewById(R.id.favoriteButton);
         }
