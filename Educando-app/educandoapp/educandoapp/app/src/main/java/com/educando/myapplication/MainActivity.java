@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         userSession = UserSession.getInstance(this); // Obtener la instancia de UserSession
+
+        // Manejar clic en icono de Instagram
+        ImageView instagramIcon = findViewById(R.id.instagram_icon);
+        instagramIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String instagramUrl = "https://www.instagram.com/tu_pagina_de_instagram";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(instagramUrl));
+                startActivity(intent);
+            }
+        });
+
+        // Manejar clic en icono de Facebook
+        ImageView facebookIcon = findViewById(R.id.facebook_icon);
+        facebookIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String facebookUrl = "https://www.facebook.com/tu_pagina_de_facebook";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
+                startActivity(intent);
+            }
+        });
 
         // Inicializar componentes de la UI
         nombre_main = findViewById(R.id.nombre_main);
@@ -149,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     nombre_main.setText(nombreCompleto);
 
                     // Guardar los detalles del usuario en SharedPreferences
-                    userSession.setUserSession(userDetails.getEmail(), userDetails.getNombre(), userDetails.getApellido(), authToken);
+                    userSession.setUserSession(userDetails.getEmail(), userDetails.getNombre(), userDetails.getApellido(), authToken, userDetails.getId());
                 } else {
                     // Manejar el error de respuesta
                     int statusCode = response.code();

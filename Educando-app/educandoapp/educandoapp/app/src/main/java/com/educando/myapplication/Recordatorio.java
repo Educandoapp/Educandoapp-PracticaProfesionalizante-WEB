@@ -3,6 +3,7 @@ package com.educando.myapplication;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ import static com.educando.myapplication.R.id.Cuenta;
 import static com.educando.myapplication.R.id.main;
 
 
-public class Recordatorio extends AppCompatActivity {
+public class RecordatorioActivity extends AppCompatActivity {
 
     private SharedPreferences preferencias;
     private List<String> listaTareas;
@@ -46,7 +47,9 @@ public class Recordatorio extends AppCompatActivity {
         editTextRecordatorio = findViewById(R.id.editTextRecordatorio);
         datePicker = findViewById(R.id.datePicker);
 
-        preferencias = getSharedPreferences("MisRecordatorios", MODE_PRIVATE);
+        // preferencias = getSharedPreferences("MisRecordatorios", MODE_PRIVATE);
+
+        Log.d("Recordatorio", "La actividad Recordatorio se está iniciando correctamente.");
 
         // Mostrar la lista de tareas al iniciar la actividad
         mostrarListaTareas();

@@ -73,7 +73,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
                         // Inicia la nueva actividad y pasa la categoría seleccionada como parámetro
                         Intent intent = new Intent(context, CategoryCourseActivity.class);
-                        intent.putExtra("categoryName", selectedCategory.getName());
+                        intent.putExtra("id_categoria", selectedCategory.getId());
                         context.startActivity(intent);
                     }
                 }

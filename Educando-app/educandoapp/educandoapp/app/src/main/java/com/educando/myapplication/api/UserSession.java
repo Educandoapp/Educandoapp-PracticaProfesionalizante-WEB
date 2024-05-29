@@ -7,6 +7,8 @@ public class UserSession {
     private SharedPreferences sharedPreferences;
     private static final String PREF_NAME = "UserSession";
     private static final String KEY_AUTH_TOKEN = "authToken";
+
+    private static final String KEY_USER_ID = "userId";
     private static final String KEY_USER_EMAIL = "userEmail";
     private static final String KEY_USER_FIRST_NAME = "userFirstName";
     private static final String KEY_USER_LAST_NAME = "userLastName";
@@ -88,16 +90,30 @@ public class UserSession {
         editor.remove(KEY_USER_FIRST_NAME);
         editor.remove(KEY_USER_LAST_NAME);
         editor.remove(KEY_AUTH_TOKEN);
+        editor.remove(KEY_USER_ID);
         editor.apply();
     }
 
     // Método para guardar el correo electrónico, nombre y apellido del usuario en SharedPreferences
-    public void setUserSession(String userEmail, String userFirstName, String userLastName, String authToken) {
+    public void setUserSession(String userEmail, String userFirstName, String userLastName, String authToken, int userId) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USER_EMAIL, userEmail);
         editor.putString(KEY_USER_FIRST_NAME, userFirstName);
         editor.putString(KEY_USER_LAST_NAME, userLastName);
         editor.putString(KEY_AUTH_TOKEN, authToken);
+        editor.putInt(KEY_USER_ID, userId);
         editor.apply();
+    }
+
+    // Método para guardar el ID del usuario en SharedPreferences
+    public void setUserId(int userId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_USER_ID, userId);
+        editor.apply();
+    }
+
+    // Método para obtener el ID del usuario desde SharedPreferences
+    public int getUserId() {
+        return sharedPreferences.getInt(KEY_USER_ID, -1);
     }
 }

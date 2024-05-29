@@ -175,3 +175,17 @@ class Contacto(models.Model):
     
     def __str__(self) :
         return str( self.id_contacto)
+    
+class Recordatorio(models.Model):
+    id_recordatorio = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    tarea = models.CharField(max_length=255)
+    fecha = models.DateField()
+
+    class Meta:
+        db_table = 'recordatorio'
+        verbose_name = 'Consulta de recordatorio'
+        verbose_name_plural = 'Consultas de recordatorios'
+
+    def __str__(self):
+        return f"{self.usuario.id_usuario} - {self.tarea}"

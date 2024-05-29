@@ -1,8 +1,10 @@
 package com.educando.myapplication;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import static com.educando.myapplication.R.id.pic;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull CourseAdapter.ViewHolder holder, int position) {
         Course course = courses.get(position);
+
+        Log.d(TAG, "Binding course at position " + position + ": " + course.getName());
+
         holder.titleTxt.setText(course.getName());
         // Limita la descripción a las primeras cinco palabras y agrega puntos suspensivos si es necesario
         holder.descriptionTxt.setText(limitDescription(course.getDescription()));
@@ -50,6 +55,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         Glide.with(holder.itemView.getContext())
                 .load(course.getImageUrl())
                 .into(holder.pic);
+
+        Log.d(TAG, "Course bound: " + course.getName());
     }
 
     // Método para limitar la descripción a las primeras cinco palabras y agregar puntos suspensivos si es necesario

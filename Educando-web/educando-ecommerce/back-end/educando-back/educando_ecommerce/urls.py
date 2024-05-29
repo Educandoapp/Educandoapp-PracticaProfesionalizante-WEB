@@ -1,7 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
 from educando_ecommerce import views
-from .views import ContactoListView, ContactoView
 from .views import test_connection
 
 # Definición del enrutador
@@ -69,9 +68,9 @@ urlpatterns = [
     # URL para obtener todos los cursos
     path('cursos/', views.CursoViewSet.as_view({'get': 'list'}), name='cursos'),
 
-    path('contacto/', ContactoView.as_view(), name='contacto'),
+    path('contacto/', views.ContactoView.as_view(), name='contacto'),
 
-    path('contactos/', ContactoListView.as_view(), name='contactos'),
+    path('contactos/', views.ContactoListView.as_view(), name='contactos'),
 
-
+    path('recordatorios/<int:id_usuario>/', views.RecordatoriosUsuarioView.as_view(), name='recordatorios-usuario'),
 ]

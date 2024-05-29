@@ -2,6 +2,7 @@ package com.educando.myapplication.api;
 
 import com.educando.myapplication.Category;
 import com.educando.myapplication.Course;
+import com.educando.myapplication.Recordatorio;
 import com.educando.myapplication.Usuario;
 import com.google.gson.JsonObject;
 
@@ -13,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -39,8 +41,8 @@ public interface ApiService {
     @POST("obtener-usuario/")
     Call<UserDetailsResponse> obtenerUsuario(@Body Map<String, String> token);
 
-    // @PUT("actualizar_usuario/{id_usuario}/")
-    // Call<Void> actualizarUsuario(@Path("id_usuario") int idUsuario, @Body Usuario usuario);
+    @PUT("usuarios/{id}/")
+    Call<UserDetailsResponse> updatePassword(@Path("id") int id, @Body JsonObject payload);
 
     @GET("cursos_por_categoria/{id_categoria}/")
     Call<List<Course>> getCoursesByCategory(@Path("id_categoria") int idCategoria);
@@ -59,4 +61,7 @@ public interface ApiService {
 
     @GET("contactos/")
     Call<List<ContactResponse>> obtenerContactos(@Query("email") String email);
+
+    @GET("recordatorios/{id_usuario}/")
+    Call<List<Recordatorio>> getRecordatoriosPorUsuario(@Path("id_usuario") int idUsuario);
 }

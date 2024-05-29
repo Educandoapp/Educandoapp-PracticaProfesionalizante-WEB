@@ -196,6 +196,7 @@ public class AccountActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         LinearLayout Recordatorios = findViewById(acc_go_recordatorios);
         Recordatorios.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,5 @@
-from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer
-from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
+from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer, RecordatorioSerializer
+from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, Recordatorio
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
@@ -146,6 +146,11 @@ class UsuarioDetailView(APIView):
     def put(self, request, pk):
         # Obtener el usuario existente
         usuario = get_object_or_404(Usuario, pk=pk)
+
+        # Validar la contraseña antigua
+        old_password = request.data.get('old_password')
+        if old_password and not check_password(old_password, usuario.password):
+            return Response({'mensaje': 'La contraseña antigua es incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Actualizar el email si se proporciona en la solicitud
         if 'email' in request.data:
@@ -441,3 +446,15 @@ class ContactoListView(APIView):
             print("Datos enviados en la respuesta:", serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'error': 'Email parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+class RecordatoriosUsuarioView(APIView):
+    def get(self, request, id_usuario):
+        # Buscar el usuario o devolver 404 si no existe
+        usuario = get_object_or_404(Usuario, id=id_usuario)
+        
+        # Obtener los recordatorios del usuario
+        recordatorios = Recordatorio.objects.filter(usuario=usuario)
+        
+        # Serializar los recordatorios y devolverlos como respuesta
+        serializer = RecordatorioSerializer(recordatorios, many=True)
+        return Response(serializer.data)

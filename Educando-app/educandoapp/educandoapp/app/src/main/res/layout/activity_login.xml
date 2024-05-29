@@ -7,6 +7,25 @@
     android:background="#EFF0FC"
     tools:context=".MainActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="600dp"
+        android:layout_height="320dp"
+        android:src="@drawable/logoapp"
+        android:contentDescription="Logo de la aplicación"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:elevation="2dp" />
+
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"

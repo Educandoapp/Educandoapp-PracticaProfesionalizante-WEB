@@ -1,6 +1,6 @@
 from  rest_framework import serializers
 
-from .models import Rol, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, ForoRespuesta
+from .models import Rol, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, ForoRespuesta, Recordatorio
 
 class RolSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -78,3 +78,8 @@ class ContactoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contacto
         fields = '__all__'
+
+class RecordatorioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recordatorio
+        fields = ['id', 'usuario', 'tarea', 'fecha']
