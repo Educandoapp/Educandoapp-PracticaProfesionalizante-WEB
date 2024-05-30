@@ -15,11 +15,14 @@ import datetime, jwt
 from django.contrib.auth.models import Group
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import action
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 from django.http import JsonResponse
 
 def test_connection(request):
     return JsonResponse({'message': 'Connection successful'})
+
 class UsuarioView(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
@@ -447,10 +450,15 @@ class ContactoListView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'error': 'Email parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
     
+
+class RecordatoriosViewSet(viewsets.ModelViewSet):   
+    queryset = Recordatorio.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = RecordatorioSerializer
 class RecordatoriosUsuarioView(APIView):
     def get(self, request, id_usuario):
         # Buscar el usuario o devolver 404 si no existe
-        usuario = get_object_or_404(Usuario, id=id_usuario)
+        usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
         
         # Obtener los recordatorios del usuario
         recordatorios = Recordatorio.objects.filter(usuario=usuario)
@@ -458,3 +466,24 @@ class RecordatoriosUsuarioView(APIView):
         # Serializar los recordatorios y devolverlos como respuesta
         serializer = RecordatorioSerializer(recordatorios, many=True)
         return Response(serializer.data)
+    
+class CrearRecordatorioView(APIView):
+    def post(self, request):
+        print(f"Datos recibidos: {request.data}")
+        serializer = RecordatorioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            print("Tarea guardada correctamente")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(f"Errores de validación: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class EliminarRecordatorioView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, id_recordatorio):
+        print(f'Solicitud POST recibida para eliminar el recordatorio con ID: {id_recordatorio}')
+        recordatorio = get_object_or_404(Recordatorio, id_recordatorio=id_recordatorio)
+        recordatorio.delete()
+        print(f'Recordatorio con ID {id_recordatorio} eliminado correctamente.')
+        return Response(status=status.HTTP_204_NO_CONTENT)

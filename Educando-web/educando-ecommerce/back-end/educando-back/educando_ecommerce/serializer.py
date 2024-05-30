@@ -82,4 +82,4 @@ class ContactoSerializer(serializers.ModelSerializer):
 class RecordatorioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recordatorio
-        fields = ['id', 'usuario', 'tarea', 'fecha']
+        fields = ['id_recordatorio', 'usuario', 'tarea', 'fecha']

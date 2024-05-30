@@ -454,7 +454,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_2" />
+                        android:src="@drawable/cat3" />
 
                     <TextView
                         android:id="@+id/textView12"

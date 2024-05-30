@@ -2,6 +2,8 @@ from django.urls import path, include
 from rest_framework import routers
 from educando_ecommerce import views
 from .views import test_connection
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 # Definición del enrutador
 router = routers.DefaultRouter()
@@ -10,6 +12,7 @@ router.register(r'curso', views.CursoViewSet, basename='curso')
 router.register(r'carrito', views.CarritoViewSet, basename='carrito')
 router.register(r'foro', views.ForoViewSet, basename='foro')
 router.register(r'contacto', views.ContactoViewSet, basename='contacto')
+router.register(r'recordatorio', views.RecordatoriosViewSet, basename='recordatorio')
 
 # URLs de la aplicación
 urlpatterns = [
@@ -73,4 +76,13 @@ urlpatterns = [
     path('contactos/', views.ContactoListView.as_view(), name='contactos'),
 
     path('recordatorios/<int:id_usuario>/', views.RecordatoriosUsuarioView.as_view(), name='recordatorios-usuario'),
+
+    path('recordatorios/', views.CrearRecordatorioView.as_view(), name='crear-recordatorio'),
+
+    path('recordatorios/eliminar/<int:id_recordatorio>/', views.EliminarRecordatorioView.as_view(), name='eliminar-recordatorio'),
+
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]

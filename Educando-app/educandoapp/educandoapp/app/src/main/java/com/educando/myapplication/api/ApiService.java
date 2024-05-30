@@ -11,6 +11,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -64,4 +65,10 @@ public interface ApiService {
 
     @GET("recordatorios/{id_usuario}/")
     Call<List<Recordatorio>> getRecordatoriosPorUsuario(@Path("id_usuario") int idUsuario);
+
+    @POST("recordatorios/")
+    Call<Recordatorio> guardarRecordatorio(@Body Recordatorio recordatorio);
+
+    @POST("recordatorios/eliminar/{id_recordatorio}/")
+    Call<Void> eliminarRecordatorio(@Path("id_recordatorio") int id_recordatorio);
 }

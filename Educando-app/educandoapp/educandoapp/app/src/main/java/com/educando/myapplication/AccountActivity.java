@@ -201,7 +201,7 @@ public class AccountActivity extends AppCompatActivity {
         Recordatorios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountActivity.this, Recordatorio.class);
+                Intent intent = new Intent(AccountActivity.this, RecordatorioActivity.class);
                 startActivity(intent);
             }
         });
