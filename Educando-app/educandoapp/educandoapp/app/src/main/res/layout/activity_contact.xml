@@ -100,7 +100,7 @@
                             android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:id="@+id/back_account"
+                                    android:id="@+id/go_inicio"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="0.25"
@@ -113,13 +113,39 @@
                                             android:layout_gravity="center"
                                             android:layout_margin="5dp"
                                             android:contentDescription="Ícono de inicio"
+                                            android:src="@drawable/btn_1"
+                                            app:tint="#707070" />
+
+                                        <TextView
+                                            android:id="@+id/textViewInicio"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Inicio"
+                                            android:textAlignment="center"
+                                            android:textColor="#707070" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/back_account"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.25"
+                                    android:contentDescription="Botón de mi cuenta"
+                                    android:orientation="vertical">
+
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:layout_gravity="center"
+                                            android:layout_margin="5dp"
+                                            android:contentDescription="Ícono de mi cuenta"
                                             android:src="@drawable/btn_4" />
 
                                         <TextView
                                             android:id="@+id/textView10"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:text="Cuenta"
+                                            android:text="Mi Cuenta"
                                             android:textAlignment="center"
                                             android:textColor="#707070" />
                                 </LinearLayout>
@@ -130,7 +156,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_weight="0.25"
-                                    android:contentDescription="Botón de cuenta"
+                                    android:contentDescription="Botón de historial"
                                     android:orientation="vertical">
 
                                         <ImageView
@@ -138,8 +164,9 @@
                                             android:layout_height="24dp"
                                             android:layout_gravity="center"
                                             android:layout_margin="5dp"
-                                            android:contentDescription="Ícono de cuenta"
-                                            android:src="@drawable/ic_1" />
+                                            android:contentDescription="Ícono del historial"
+                                            android:src="@drawable/ic_1"
+                                            app:tint="#707070" />
 
                                         <TextView
                                             android:id="@+id/textView13"

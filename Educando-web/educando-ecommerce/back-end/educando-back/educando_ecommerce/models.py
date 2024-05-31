@@ -72,6 +72,7 @@ class Categoria(models.Model):
     id_categoria = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=45, null=True)
     descripcion = models.CharField(max_length=250, null=True)
+    categoria_imagen_url = models.URLField(null=True,max_length=2000)
     class Meta:
         db_table = 'categoria'
         verbose_name = 'Categoria de curso'
@@ -110,6 +111,16 @@ class MisCurso(models.Model):
         
     def __str__(self) :
         return str(self.id_mis_curso)
+    
+class CursoFavorito(models.Model):
+    id_curso_favorito = models.AutoField(primary_key=True)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'curso_favorito'
+        verbose_name = 'Curso Favorito'
+        verbose_name_plural = 'Cursos Favoritos'
 
 class Carrito(models.Model):
     id_carrito = models.AutoField(primary_key=True)
@@ -162,8 +173,10 @@ class ForoRespuesta(models.Model):
 class Contacto(models.Model):
     id_contacto = models.AutoField(primary_key=True,default=None)  
     email = models.CharField(max_length=250, null=True)
+    titulo = models.CharField(max_length=100, null=True)
     nombre = models.CharField(max_length=80, null=True)
     mensaje = models.CharField(max_length=500, null=True)
+    fecha_mensaje = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'contacto'
@@ -172,3 +185,17 @@ class Contacto(models.Model):
     
     def __str__(self) :
         return str( self.id_contacto)
+    
+class Recordatorio(models.Model):
+    id_recordatorio = models.AutoField(primary_key=True)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    tarea = models.CharField(max_length=255)
+    fecha = models.DateField()
+
+    class Meta:
+        db_table = 'recordatorio'
+        verbose_name = 'Consulta de recordatorio'
+        verbose_name_plural = 'Consultas de recordatorios'
+
+    def __str__(self):
+        return f"{self.usuario.id_usuario} - {self.tarea}"

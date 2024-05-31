@@ -40,15 +40,27 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <ImageView
+                        android:id="@+id/circleImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="32dp"
+                        android:src="@drawable/circle_background"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
                         android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_marginTop="32dp"
                         android:contentDescription="Imagen de perfil"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/profile" />
+                        android:background="@drawable/circle_background"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/name" />
 
                     <TextView
                         android:id="@+id/textView"
@@ -332,7 +344,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Clave"
+                                android:text="Contraseña"
                                 android:textColor="#182693"
                                 android:textSize="18sp" />
 
@@ -354,7 +366,7 @@
                             android:layout_height="50dp"
                             android:layout_margin="24dp"
                             android:background="@drawable/background_button2"
-                            android:text="Desconectar"
+                            android:text="Cerrar sesión"
                             android:textColor="#ffffff"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -392,7 +404,8 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_1" />
+                        android:src="@drawable/btn_1"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -416,7 +429,8 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_2" />
+                        android:src="@drawable/bell"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView11"
@@ -426,7 +440,8 @@
                         android:text="Recordatorios"
                         android:textAlignment="center"
                         android:textColor="#707070"
-                        android:onClick="irARecordatorio" /> </LinearLayout>
+                        android:onClick="irARecordatorio" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/acc_go_cursos"
@@ -440,7 +455,8 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_3" />
+                        android:src="@drawable/baseline_menu_book_24"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView12"

@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/blue_background">
 
@@ -120,10 +120,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:text="Qué te gustaría aprender hoy?"
+                    android:text="¿Qué aprenderás hoy?"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="21sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -151,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
@@ -172,7 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="8dp"
                 android:orientation="horizontal">
 
@@ -191,7 +191,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal">
 
@@ -228,16 +228,19 @@
         android:layout_margin="16dp"
         android:src="@drawable/whatsapp_icon"
         android:contentDescription="Botón de WhatsApp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:backgroundTint="#008000" />
+        app:backgroundTint="#008000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_app_bar_container" />
 
+    <!-- BottomAppBar -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bottom_app_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="@+id/scrollView3">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
@@ -254,20 +257,20 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
                     android:orientation="vertical"
-                    android:contentDescription="Mis Cursos">
+                    android:contentDescription="Favoritos">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_3" />
+                        android:src="@drawable/btn_2" />
 
                     <TextView
                         android:id="@+id/textView12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mis Cursos"
+                        android:text="Favoritos"
                         android:textAlignment="center"
                         android:textColor="#707070" />
                 </LinearLayout>
@@ -278,7 +281,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
                     android:orientation="vertical"
-                    android:contentDescription="Cuenta">
+                    android:contentDescription="Mi Cuenta">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -291,7 +294,7 @@
                         android:id="@+id/textView13"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cuenta"
+                        android:text="Mi Cuenta"
                         android:textAlignment="center"
                         android:textColor="#707070" />
                 </LinearLayout>

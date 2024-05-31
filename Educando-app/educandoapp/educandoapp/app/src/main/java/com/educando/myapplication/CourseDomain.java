@@ -7,12 +7,18 @@ public class CourseDomain {
     private String time;
     private String picPath;
 
+    private String description;
+
     public CourseDomain(String title, String owner, double price, String time, String picPath) {
         this.title = title;
         this.owner = owner;
         this.price = price;
         this.time = time;
         this.picPath = picPath;
+    }
+
+    public CourseDomain() {
+        // Constructor vacío
     }
 
     public String getTitle() {
@@ -53,6 +59,15 @@ public class CourseDomain {
 
     public void setPicPath(String picPath) {
         this.picPath = picPath;
+    }
+
+    // Getters y setters para manipular el atributo de descripción
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

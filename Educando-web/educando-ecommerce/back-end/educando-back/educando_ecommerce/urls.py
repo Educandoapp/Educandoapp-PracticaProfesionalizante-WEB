@@ -1,7 +1,9 @@
 from django.urls import path, include
 from rest_framework import routers
 from educando_ecommerce import views
-from .views import ContactoView
+from .views import test_connection
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 # Definición del enrutador
 router = routers.DefaultRouter()
@@ -10,11 +12,14 @@ router.register(r'curso', views.CursoViewSet, basename='curso')
 router.register(r'carrito', views.CarritoViewSet, basename='carrito')
 router.register(r'foro', views.ForoViewSet, basename='foro')
 router.register(r'contacto', views.ContactoViewSet, basename='contacto')
+router.register(r'recordatorio', views.RecordatoriosViewSet, basename='recordatorio')
 
 # URLs de la aplicación
 urlpatterns = [
     # Incluir las URLs del enrutador
     path('', include(router.urls)),
+
+    path('test_connection/', test_connection, name='test_connection'),
     
     # URL para la vista de inicio de sesión
     path('login/', views.UsuarioView.as_view({'post': 'inicio_sesion'}), name='login'),
@@ -30,6 +35,10 @@ urlpatterns = [
     
     # URL para la vista de mis cursos
     path('mis_cursos/', views.MisCursosView.as_view(), name='mis_cursos'),
+
+    # URLs para la gestión de cursos favoritos
+    path('cursos_favoritos/', views.CursoFavoritoList.as_view()),
+    path('cursos_favoritos/<int:pk>/', views.CursoFavoritoDetail.as_view()),
     
     # URL para la vista de adquirir curso
     path('adquirir_curso/', views.AdquirirCursoView.as_view(), name='adquirir_curso'),
@@ -60,6 +69,23 @@ urlpatterns = [
     # URL para la vista de inicio de sesión
     path('auth/validar_password/', views.UsuarioView.as_view({'post': 'validar_password'}), name='validar_password'),
 
-    # Otras URLs de tu aplicación
-    path('contacto/', ContactoView.as_view(), name='contacto'),
+    # URL para obtener las categorías
+    path('categorias/', views.CategoriaViewSet.as_view({'get': 'list'}), name='categorias'),
+
+    # URL para obtener todos los cursos
+    path('cursos/', views.CursoViewSet.as_view({'get': 'list'}), name='cursos'),
+
+    # URLs para la gestión de contactos
+    path('contacto/', views.ContactoView.as_view(), name='contacto'),
+    path('contactos/', views.ContactoListView.as_view(), name='contactos'),
+
+    # URLs para la gestión de recordatorios
+    path('recordatorios/<int:id_usuario>/', views.RecordatoriosUsuarioView.as_view(), name='recordatorios-usuario'),
+    path('recordatorios/', views.CrearRecordatorioView.as_view(), name='crear-recordatorio'),
+    path('recordatorios/eliminar/<int:id_recordatorio>/', views.EliminarRecordatorioView.as_view(), name='eliminar-recordatorio'),
+
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]
