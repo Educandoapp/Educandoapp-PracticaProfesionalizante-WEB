@@ -257,7 +257,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
                     android:orientation="vertical"
-                    android:contentDescription="Mis Cursos">
+                    android:contentDescription="Favoritos">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -270,7 +270,7 @@
                         android:id="@+id/textView12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mis Cursos"
+                        android:text="Favoritos"
                         android:textAlignment="center"
                         android:textColor="#707070" />
                 </LinearLayout>

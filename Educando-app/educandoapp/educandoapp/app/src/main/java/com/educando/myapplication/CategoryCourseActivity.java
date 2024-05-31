@@ -1,9 +1,5 @@
 package com.educando.myapplication;
 
-import static com.educando.myapplication.db.DbHelper.TABLE_CATEGORIA;
-import static com.educando.myapplication.db.DbHelper.TABLE_CURSO;
-import static com.educando.myapplication.db.DbHelper.TABLE_INTER_CUR_USER;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -59,13 +55,13 @@ public class CategoryCourseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cour_of_cat);
 
         int categoryId = getIntent().getIntExtra("id_categoria", -1);
-        Log.d(TAG, "Received categoryId: " + categoryId);
 
         if (categoryId == -1) {
             Toast.makeText(this, "ID de categoría no válido.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
+        String categoryName = getIntent().getStringExtra("nombre");
 
         TextView categoryNameTextView = findViewById(R.id.list_course);
         categoryNameTextView.setText(categoryName);
@@ -78,7 +74,7 @@ public class CategoryCourseActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         courseList = new ArrayList<>();
-        courseAdapter = new CourseAdapter(courseList);
+        courseAdapter = new CourseAdapter(courseList, true);
         recyclerView.setAdapter(courseAdapter);
 
         Log.d(TAG, "RecyclerView and adapter configured");
@@ -86,7 +82,6 @@ public class CategoryCourseActivity extends AppCompatActivity {
         getCoursesByCategory(categoryId);
 
         LinearLayout inicio = findViewById(R.id.back_main);
-
         inicio.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -96,15 +91,30 @@ public class CategoryCourseActivity extends AppCompatActivity {
             }
         });
 
+
+
         LinearLayout cuenta = findViewById(R.id.back_account);
         cuenta.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                Log.d("CategoryCourseActivity", "MI CUENTA button clicked");
                 Intent intent = new Intent(CategoryCourseActivity.this, AccountActivity.class);
                 startActivity(intent);
             }
         });
+
+        LinearLayout favoritos = findViewById(R.id.cursos_favoritos);
+        favoritos.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d("CategoryCourseActivity", "FAVORITOS button clicked");
+                Intent intent = new Intent(CategoryCourseActivity.this, FavoriteCoursesActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void getCoursesByCategory(int categoryId) {
@@ -126,6 +136,8 @@ public class CategoryCourseActivity extends AppCompatActivity {
 
                     for (Course course : courses) {
                         Log.d(TAG, "Course: " + course.getName() + ", Description: " + course.getDescription());
+                        // Verificar si el curso está marcado como favorito y establecer la bandera correspondiente
+                        course.setFavorite(FavoriteCoursesManager.getInstance().isFavorite(course.getId()));
                     }
 
                     courseList.clear();

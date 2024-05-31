@@ -42,6 +42,9 @@ public class UsuarioCursosResponse {
         @SerializedName("descripcion_curso")
         private String descripcionCurso;
 
+        @SerializedName("imagen_url")
+        private String imagenUrl;
+
         public int getIdMisCurso() {
             return idMisCurso;
         }
@@ -72,6 +75,14 @@ public class UsuarioCursosResponse {
 
         public void setDescripcionCurso(String descripcionCurso) {
             this.descripcionCurso = descripcionCurso;
+        }
+
+        public String getImagenUrl() {
+            return imagenUrl;
+        }
+
+        public void setImagenUrl(int imagenUrl) {
+            this.idMisCurso = imagenUrl;
         }
     }
 }

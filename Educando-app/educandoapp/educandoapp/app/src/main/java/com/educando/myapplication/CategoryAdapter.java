@@ -1,8 +1,11 @@
 package com.educando.myapplication;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +77,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                         // Inicia la nueva actividad y pasa la categoría seleccionada como parámetro
                         Intent intent = new Intent(context, CategoryCourseActivity.class);
                         intent.putExtra("id_categoria", selectedCategory.getId());
+                        intent.putExtra("nombre", selectedCategory.getName());
                         context.startActivity(intent);
                     }
                 }

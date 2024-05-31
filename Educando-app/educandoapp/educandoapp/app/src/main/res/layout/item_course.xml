@@ -59,16 +59,16 @@
             android:contentDescription="Descripción del curso: [Course Description]" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_compra"
+            android:id="@+id/button_accion"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginStart="18dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/background_btn"
-            android:contentDescription="Botón de compra"
+            android:contentDescription="[Button Description]"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="Comprar"
+            android:text="Continuar"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"

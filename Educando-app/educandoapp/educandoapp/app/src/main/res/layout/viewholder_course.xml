@@ -2,9 +2,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="250dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="25dp"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
 
         <ImageView
             android:id="@+id/pic"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -23,10 +23,12 @@
             app:srcCompat="@drawable/pic1"
             android:contentDescription="Imagen del producto: [Nombre del producto]" />
 
+        <!-- Botón de favorito -->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/pic"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,10 +51,10 @@
                 android:text="$000,000"
                 android:textColor="@color/blue"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ownerTxt"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/timetxt" />
+                app:layout_constraintEnd_toStartOf="@+id/timetxt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ownerTxt" />
 
             <TextView
                 android:id="@+id/timetxt"
@@ -65,6 +67,17 @@
                 app:layout_constraintStart_toEndOf="@+id/precioTxt"
                 app:layout_constraintTop_toTopOf="@+id/precioTxt"
                 app:layout_constraintBottom_toBottomOf="@+id/precioTxt" />
+
+            <ImageButton
+                android:id="@+id/favoriteButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
+                tools:ignore="MissingConstraints"
+                app:layout_constraintEnd_toEndOf="parent"
+                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

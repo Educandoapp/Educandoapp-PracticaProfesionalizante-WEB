@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:cardCornerRadius="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -12,46 +13,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/top_background2" />
+        app:srcCompat="@drawable/top_background2"
+        android:contentDescription="Imagen de encabezado" />
 
     <TextView
         android:id="@+id/list_course"
         android:layout_width="wrap_content"
-        android:layout_height="75dp"
-        android:text=""
+        android:layout_height="wrap_content"
+        android:text="Cursos Favoritos"
         android:textColor="#6672FF"
-        android:textSize="40sp"
+        android:textSize="35sp"
         android:textStyle="bold"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        app:layout_constraintTop_toBottomOf="@+id/image1"/>
-
+        app:layout_constraintTop_toBottomOf="@+id/image1"
+        android:contentDescription="Título: Cursos Favoritos" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view2"
+        android:id="@+id/recycler_view1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#FFFFFF"
+        app:cardBackgroundColor="@android:color/transparent"
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_course"
-        app:layout_constraintVertical_bias="1.0" />
+        android:contentDescription="Lista de cursos" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout2"
-        android:layout_width="414dp"
-        android:layout_height="61dp"
-        android:background="#FFFFFF"
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        app:cardBackgroundColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteX="-42dp"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -63,13 +64,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
 
                 <LinearLayout
                     android:id="@+id/back_main"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
+                    android:contentDescription="Botón de inicio"
                     android:orientation="vertical">
 
                     <ImageView
@@ -77,7 +80,9 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/btn_1" />
+                        android:contentDescription="Ícono de inicio"
+                        android:src="@drawable/btn_1"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView10"
@@ -88,12 +93,12 @@
                         android:textColor="#707070" />
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/back_account"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25"
+                    android:contentDescription="Botón de cuenta"
                     android:orientation="vertical">
 
                     <ImageView
@@ -101,6 +106,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:contentDescription="Ícono de cuenta"
                         android:src="@drawable/btn_4" />
 
                     <TextView
@@ -112,29 +118,7 @@
                         android:textColor="#707070" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/cursos_favoritos"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:orientation="vertical"
-                    android:contentDescription="Favoritos">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/btn_2" />
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Favoritos"
-                        android:textAlignment="center"
-                        android:textColor="#707070" />
-                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.bottomappbar.BottomAppBar>

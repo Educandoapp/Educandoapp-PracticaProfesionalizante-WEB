@@ -440,7 +440,8 @@
                         android:text="Recordatorios"
                         android:textAlignment="center"
                         android:textColor="#707070"
-                        android:onClick="irARecordatorio" /> </LinearLayout>
+                        android:onClick="irARecordatorio" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/acc_go_cursos"
@@ -454,7 +455,8 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/cat3" />
+                        android:src="@drawable/baseline_menu_book_24"
+                        app:tint="#707070" />
 
                     <TextView
                         android:id="@+id/textView12"

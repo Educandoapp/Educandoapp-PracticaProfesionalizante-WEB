@@ -1,5 +1,7 @@
 package com.educando.myapplication;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.educando.myapplication.api.ApiClient;
 import com.educando.myapplication.api.ApiManager;
 import com.educando.myapplication.api.ApiService;
 import com.educando.myapplication.api.UserSession;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
                             String token = usuario.getToken();
                             userSession.setAuthToken(token);
 
+                            loadFavoriteCourses();
+
                             Log.i("LoginActivity", "Token: " + token);
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -99,5 +106,27 @@ public class LoginActivity extends AppCompatActivity {
 
     private void mostrarMensajeError(String mensaje) {
         Toast.makeText(LoginActivity.this, mensaje, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadFavoriteCourses() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<List<Course>> call = apiService.getCursosFavoritos();
+
+        call.enqueue(new Callback<List<Course>>() {
+            @Override
+            public void onResponse(Call<List<Course>> call, Response<List<Course>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    FavoriteCoursesManager.getInstance().setFavoriteCourses(response.body());
+                    Log.d(TAG, "Favorite courses loaded");
+                } else {
+                    Log.d(TAG, "Failed to load favorite courses. Code: " + response.code() + ", Message: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Course>> call, Throwable t) {
+                Log.e(TAG, "Error loading favorite courses", t);
+            }
+        });
     }
 }

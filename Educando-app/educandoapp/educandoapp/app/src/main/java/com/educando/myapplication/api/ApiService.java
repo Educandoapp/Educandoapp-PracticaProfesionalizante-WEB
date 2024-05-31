@@ -29,16 +29,9 @@ public interface ApiService {
     @POST("login/")
     Call<Usuario> iniciarSesion(@Body Usuario usuario);
 
-    //@GET("usuario/{id_usuario}/")
-    // Call<Usuario> obtenerUsuarioPorId(@Path("id_usuario") int idUsuario);
-
-    // @POST("auth/validar_password/")
-    //Call<Usuario> validarPassword(@Body Usuario usuario);
-
     @POST("registro/")
     Call<RegisterResponse> registerUser(@Body RegisterRequest registerRequest);
 
-    // Nuevo método para obtener detalles del usuario
     @POST("obtener-usuario/")
     Call<UserDetailsResponse> obtenerUsuario(@Body Map<String, String> token);
 
@@ -71,4 +64,14 @@ public interface ApiService {
 
     @POST("recordatorios/eliminar/{id_recordatorio}/")
     Call<Void> eliminarRecordatorio(@Path("id_recordatorio") int id_recordatorio);
+
+    @GET("cursos_favoritos/")
+    Call<List<Course>> getCursosFavoritos();
+
+    @POST("cursos_favoritos/")
+    Call<Void> guardarCursoFavorito(@Body CursoFavoritoRequest request);
+
+    @POST("cursos_favoritos/{id_curso_favorito}/")
+    Call<Void> eliminarCursoFavorito(@Path("id_curso_favorito") int id_curso_favorito);
+
 }

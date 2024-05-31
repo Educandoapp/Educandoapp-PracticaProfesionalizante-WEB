@@ -116,4 +116,11 @@ public class UserSession {
     public int getUserId() {
         return sharedPreferences.getInt(KEY_USER_ID, -1);
     }
+
+    // Método para verificar si hay un usuario logueado
+    public static boolean isLoggedIn(Context context) {
+        UserSession userSession = getInstance(context);
+        int userId = userSession.getUserId();
+        return userId != -1;
+    }
 }

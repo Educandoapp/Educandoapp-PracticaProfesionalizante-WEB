@@ -81,6 +81,10 @@
             android:name=".MapActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".FavoriteCoursesActivity"
+            android:exported="true" />
+
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBMmZ1oRRlyS1y0KYMoyPYRkGZZc6n3BOU" />
 
     </application>

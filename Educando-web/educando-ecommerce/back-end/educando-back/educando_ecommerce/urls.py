@@ -35,6 +35,10 @@ urlpatterns = [
     
     # URL para la vista de mis cursos
     path('mis_cursos/', views.MisCursosView.as_view(), name='mis_cursos'),
+
+    # URLs para la gestión de cursos favoritos
+    path('cursos_favoritos/', views.CursoFavoritoList.as_view()),
+    path('cursos_favoritos/<int:pk>/', views.CursoFavoritoDetail.as_view()),
     
     # URL para la vista de adquirir curso
     path('adquirir_curso/', views.AdquirirCursoView.as_view(), name='adquirir_curso'),
@@ -71,14 +75,13 @@ urlpatterns = [
     # URL para obtener todos los cursos
     path('cursos/', views.CursoViewSet.as_view({'get': 'list'}), name='cursos'),
 
+    # URLs para la gestión de contactos
     path('contacto/', views.ContactoView.as_view(), name='contacto'),
-
     path('contactos/', views.ContactoListView.as_view(), name='contactos'),
 
+    # URLs para la gestión de recordatorios
     path('recordatorios/<int:id_usuario>/', views.RecordatoriosUsuarioView.as_view(), name='recordatorios-usuario'),
-
     path('recordatorios/', views.CrearRecordatorioView.as_view(), name='crear-recordatorio'),
-
     path('recordatorios/eliminar/<int:id_recordatorio>/', views.EliminarRecordatorioView.as_view(), name='eliminar-recordatorio'),
 
 

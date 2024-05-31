@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.educando.myapplication.api.ApiManager;
 import com.educando.myapplication.api.ApiService;
+import com.educando.myapplication.api.SimpleCourse;
 import com.educando.myapplication.api.UserDetailsResponse;
 import com.educando.myapplication.api.UserSession;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -110,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
         miscursos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MyCourseActivity.class);
+                Log.d("MainActivity", "miscursos button clicked");
+                Intent intent = new Intent(MainActivity.this, FavoriteCoursesActivity.class);
                 startActivity(intent);
             }
         });
@@ -214,8 +216,18 @@ public class MainActivity extends AppCompatActivity {
 
                     // Obtener la lista de todos los cursos
                     List<Course> allCourses = response.body();
+
+                    // Lista para almacenar los cursos como SimpleCourse
+                    List<SimpleCourse> simpleCourses = new ArrayList<>();
+
                     for (Course course : allCourses) {
                         Log.d(TAG, "Curso: " + course.getName() + ", Descripción: " + course.getDescription());
+
+                        // Crear un objeto SimpleCourse con los datos del curso
+                        SimpleCourse simpleCourse = new SimpleCourse(course.getId(), course.getName(), course.getDescription());
+
+                        // Agregar el objeto SimpleCourse a la lista
+                        simpleCourses.add(simpleCourse);
                     }
 
                     // Verificar si hay suficientes cursos para seleccionar 6 aleatoriamente
@@ -231,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Inicializar el adaptador con la lista de cursos aleatorios
-                        CourseAdapter adapter = new CourseAdapter(randomCourses);
+                        CourseAdapter adapter = new CourseAdapter(randomCourses, false);
                         recyclerViewCourse.setAdapter(adapter);
 
                         // Agregar log al inicializar el adaptador

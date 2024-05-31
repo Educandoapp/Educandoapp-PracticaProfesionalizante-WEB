@@ -111,6 +111,16 @@ class MisCurso(models.Model):
         
     def __str__(self) :
         return str(self.id_mis_curso)
+    
+class CursoFavorito(models.Model):
+    id_curso_favorito = models.AutoField(primary_key=True)
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'curso_favorito'
+        verbose_name = 'Curso Favorito'
+        verbose_name_plural = 'Cursos Favoritos'
 
 class Carrito(models.Model):
     id_carrito = models.AutoField(primary_key=True)

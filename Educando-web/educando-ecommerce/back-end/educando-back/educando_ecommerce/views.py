@@ -1,10 +1,10 @@
-from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer, RecordatorioSerializer
-from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, Recordatorio
+from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer, RecordatorioSerializer, CursoFavoritoSerializer
+from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, Recordatorio, CursoFavorito
 from rest_framework import viewsets, permissions
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, NotFound
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -18,7 +18,7 @@ from rest_framework.decorators import action
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 
 def test_connection(request):
     return JsonResponse({'message': 'Connection successful'})
@@ -227,13 +227,17 @@ class PorCategoriaViewSet(viewsets.ViewSet):
     def list(self, request):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        print("Data enviada al front (lista de categorías):", data)
+        return Response(data)
 
     def retrieve(self, request, pk=None):
         categoria = Categoria.objects.get(pk=pk)
         cursos = Curso.objects.filter(id_categoria=categoria)
         serializer = CursoSerializer(cursos, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        print("Data enviada al front (cursos de una categoría):", data)
+        return Response(data)
 
 class CursoViewSet(viewsets.ModelViewSet):  
     queryset = Curso.objects.all()
@@ -275,6 +279,50 @@ class MisCursosView(APIView):
 
         # Devuelve los cursos serializados
         return Response(serializer.data)
+    
+class CursoFavoritoList(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        cursos_favoritos = CursoFavorito.objects.all()
+        serializer = CursoFavoritoSerializer(cursos_favoritos, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        print("Datos recibidos en la solicitud POST de CursoFavoritoList:")
+        print(request.data)
+        serializer = CursoFavoritoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CursoFavoritoDetail(APIView):
+    permission_classes = []
+
+    def get_object(self, pk):
+        try:
+            return CursoFavorito.objects.get(pk=pk)
+        except CursoFavorito.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        curso_favorito = self.get_object(pk)
+        serializer = CursoFavoritoSerializer(curso_favorito)
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        try:
+            # Filtrar los objetos CursoFavorito por el id_curso
+            curso_favoritos = CursoFavorito.objects.filter(id_curso=pk)
+            
+            # Eliminar todos los objetos encontrados
+            for curso_favorito in curso_favoritos:
+                curso_favorito.delete()
+                
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CursoFavorito.DoesNotExist:
+            return Response({"error": "Curso favorito no encontrado."}, status=status.HTTP_404_NOT_FOUND)
     
 class AdquirirCursoView(APIView):
     def verificar_token(self, token):
