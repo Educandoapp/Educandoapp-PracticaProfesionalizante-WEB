@@ -160,7 +160,8 @@ Aquí se muestran algunas capturas de pantalla de la plataforma web:
 ### 📱 Aplicación Móvil
 Aquí se muestran algunas capturas de pantalla de la aplicación móvil:
 
-![MOBILE1-inicio](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/8d7d9a15-0560-46b3-a67d-a00ea0d8881e) ![MOBILE2-registro](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/1d267c20-ff6f-46c8-a26d-7014421e6597) ![MOBILE3-login](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/1598b9ab-0fac-488b-8e7b-93dbabb3cc49) ![MOBILE4-home](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/1f4c3bf8-7ffc-48ac-93e5-9a444c435a19) ![MOBILE5-micuenta](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/488a44f4-30e5-49bd-9ca4-304d1c70bc22) 
+![MOBILE1-inicio](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/8d7d9a15-0560-46b3-a67d-a00ea0d8881e) ![MOBILE2-registro](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/1d267c20-ff6f-46c8-a26d-7014421e6597) ![MOBILE3-login](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/1598b9ab-0fac-488b-8e7b-93dbabb3cc49) ![MOBILE4-home](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/1f4c3bf8-7ffc-48ac-93e5-9a444c435a19) ![MOBILE5-micuenta](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/488a44f4-30e5-49bd-9ca4-304d1c70bc22) ![MOBILE9-recordatorio](https://github.com/printech-educando/EducandoProyectoIntegrador/assets/102261096/fb748f3c-335e-4255-846c-f12bd5534b15)
+
 
 ---
 
