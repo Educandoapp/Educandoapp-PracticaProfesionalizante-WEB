@@ -1,10 +1,10 @@
-from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer
-from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto
+from .serializer import  ForoRespuestaSerializer, UsuarioSerializer, CategoriaSerializer, CursoSerializer, MisCursoSerializer, CarritoSerializer, ForoSerializer, ContactoSerializer, RecordatorioSerializer, CursoFavoritoSerializer
+from .models import  ForoRespuesta, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, Recordatorio, CursoFavorito
 from rest_framework import viewsets, permissions
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, NotFound
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -15,6 +15,13 @@ import datetime, jwt
 from django.contrib.auth.models import Group
 from django.contrib.auth.hashers import check_password
 from rest_framework.decorators import action
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+
+from django.http import Http404, JsonResponse
+
+def test_connection(request):
+    return JsonResponse({'message': 'Connection successful'})
 
 class UsuarioView(viewsets.ViewSet):
     permission_classes = [AllowAny]
@@ -22,6 +29,7 @@ class UsuarioView(viewsets.ViewSet):
     def create_user(self, request):
         # Validar los datos del serializer
         serializer = UsuarioSerializer(data=request.data)
+
         if serializer.is_valid():
             email = serializer.validated_data.get('email')
             password = serializer.validated_data.get('password')
@@ -142,6 +150,11 @@ class UsuarioDetailView(APIView):
         # Obtener el usuario existente
         usuario = get_object_or_404(Usuario, pk=pk)
 
+        # Validar la contraseña antigua
+        old_password = request.data.get('old_password')
+        if old_password and not check_password(old_password, usuario.password):
+            return Response({'mensaje': 'La contraseña antigua es incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
+
         # Actualizar el email si se proporciona en la solicitud
         if 'email' in request.data:
             usuario.email = request.data['email']
@@ -165,18 +178,29 @@ class UsuarioDetailView(APIView):
 
 class ObtenerUsuarioView(APIView):
     def verificar_token(self, token):
+        # Registra el token recibido para depuración
+        # print("Token recibido:", token)
+
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            # print("Payload decodificado:", payload)
             usuario_id = payload.get('id_usuario')
             return usuario_id
         except jwt.ExpiredSignatureError:
+            # print("Token expirado")
             raise AuthenticationFailed('Token expirado')
         except jwt.InvalidTokenError:
+            # print("Token inválido")
             raise AuthenticationFailed('Token inválido')
 
     def post(self, request):
+        # Imprimir el cuerpo de la solicitud
+        # print(request.data)  
         # Obtén el token del usuario desde el cuerpo de la solicitud
-        token = request.data.get('token')        
+        token = request.data.get('token')   
+
+        if not token:
+            return Response({'mensaje': 'Token no proporcionado'}, status=400)   
         
         # Verifica el token
         usuario_id = self.verificar_token(token)
@@ -203,13 +227,17 @@ class PorCategoriaViewSet(viewsets.ViewSet):
     def list(self, request):
         categorias = Categoria.objects.all()
         serializer = CategoriaSerializer(categorias, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        print("Data enviada al front (lista de categorías):", data)
+        return Response(data)
 
     def retrieve(self, request, pk=None):
         categoria = Categoria.objects.get(pk=pk)
         cursos = Curso.objects.filter(id_categoria=categoria)
         serializer = CursoSerializer(cursos, many=True)
-        return Response(serializer.data)
+        data = serializer.data
+        print("Data enviada al front (cursos de una categoría):", data)
+        return Response(data)
 
 class CursoViewSet(viewsets.ModelViewSet):  
     queryset = Curso.objects.all()
@@ -251,6 +279,50 @@ class MisCursosView(APIView):
 
         # Devuelve los cursos serializados
         return Response(serializer.data)
+    
+class CursoFavoritoList(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        cursos_favoritos = CursoFavorito.objects.all()
+        serializer = CursoFavoritoSerializer(cursos_favoritos, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        print("Datos recibidos en la solicitud POST de CursoFavoritoList:")
+        print(request.data)
+        serializer = CursoFavoritoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CursoFavoritoDetail(APIView):
+    permission_classes = []
+
+    def get_object(self, pk):
+        try:
+            return CursoFavorito.objects.get(pk=pk)
+        except CursoFavorito.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        curso_favorito = self.get_object(pk)
+        serializer = CursoFavoritoSerializer(curso_favorito)
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        try:
+            # Filtrar los objetos CursoFavorito por el id_curso
+            curso_favoritos = CursoFavorito.objects.filter(id_curso=pk)
+            
+            # Eliminar todos los objetos encontrados
+            for curso_favorito in curso_favoritos:
+                curso_favorito.delete()
+                
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CursoFavorito.DoesNotExist:
+            return Response({"error": "Curso favorito no encontrado."}, status=status.HTTP_404_NOT_FOUND)
     
 class AdquirirCursoView(APIView):
     def verificar_token(self, token):
@@ -404,8 +476,62 @@ class ContactoView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        print("Datos recibidos en el backend:", request.data)
         serializer = ContactoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            print("Mensaje de contacto guardado exitosamente.")
             return Response({'mensaje': '¡Gracias por ponerte en contacto con nosotros!'}, status=status.HTTP_201_CREATED)
+        print("Errores de validación en el serializer:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ContactoListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        email = request.query_params.get('email')
+        print("Email recibido en la solicitud:", email)
+        if email:
+            contactos = Contacto.objects.filter(email=email)
+            serializer = ContactoSerializer(contactos, many=True)
+            print("Datos enviados en la respuesta:", serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'error': 'Email parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class RecordatoriosViewSet(viewsets.ModelViewSet):   
+    queryset = Recordatorio.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = RecordatorioSerializer
+class RecordatoriosUsuarioView(APIView):
+    def get(self, request, id_usuario):
+        # Buscar el usuario o devolver 404 si no existe
+        usuario = get_object_or_404(Usuario, id_usuario=id_usuario)
+        
+        # Obtener los recordatorios del usuario
+        recordatorios = Recordatorio.objects.filter(usuario=usuario)
+        
+        # Serializar los recordatorios y devolverlos como respuesta
+        serializer = RecordatorioSerializer(recordatorios, many=True)
+        return Response(serializer.data)
+    
+class CrearRecordatorioView(APIView):
+    def post(self, request):
+        print(f"Datos recibidos: {request.data}")
+        serializer = RecordatorioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            print("Tarea guardada correctamente")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(f"Errores de validación: {serializer.errors}")
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class EliminarRecordatorioView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, id_recordatorio):
+        print(f'Solicitud POST recibida para eliminar el recordatorio con ID: {id_recordatorio}')
+        recordatorio = get_object_or_404(Recordatorio, id_recordatorio=id_recordatorio)
+        recordatorio.delete()
+        print(f'Recordatorio con ID {id_recordatorio} eliminado correctamente.')
+        return Response(status=status.HTTP_204_NO_CONTENT)

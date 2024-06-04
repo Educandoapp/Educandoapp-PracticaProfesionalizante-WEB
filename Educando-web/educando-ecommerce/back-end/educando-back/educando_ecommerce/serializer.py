@@ -1,6 +1,6 @@
 from  rest_framework import serializers
 
-from .models import Rol, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, ForoRespuesta
+from .models import Rol, Usuario, Categoria,Curso, MisCurso, Carrito, Foro, Contacto, ForoRespuesta, Recordatorio, CursoFavorito
 
 class RolSerializer(serializers.ModelSerializer):    
     class Meta:
@@ -52,11 +52,16 @@ class MisCursoSerializer(serializers.ModelSerializer):
     # Agregar campo de descripción
     nombre_curso = serializers.CharField(source='id_curso.nombre_curso', read_only=True)
     descripcion_curso = serializers.CharField(source='id_curso.descripcion', read_only=True)
+    imagen_url = serializers.CharField(source='id_curso.imagen_url', read_only=True)
     
     class Meta:
         model = MisCurso
-        fields = ['id_mis_curso', 'id_usuario', 'id_curso', 'nombre_curso', 'descripcion_curso']
+        fields = ['id_mis_curso', 'id_usuario', 'id_curso', 'nombre_curso', 'descripcion_curso', 'imagen_url']
 
+class CursoFavoritoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CursoFavorito
+        fields = '__all__'
 
 #===========================================================================================================================================================================
 class CarritoSerializer(serializers.ModelSerializer):   
@@ -78,3 +83,8 @@ class ContactoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contacto
         fields = '__all__'
+
+class RecordatorioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recordatorio
+        fields = ['id_recordatorio', 'usuario', 'tarea', 'fecha']

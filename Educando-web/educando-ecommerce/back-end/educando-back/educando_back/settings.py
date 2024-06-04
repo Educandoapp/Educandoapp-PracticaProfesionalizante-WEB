@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,7 +32,7 @@ CSRF_COOKIE_HTTPONLY = False
 DEBUG = 'True'
 #DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.5', 'localhost', '127.0.0.1']
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:    
@@ -161,6 +162,14 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'accept',
+    'origin',
+    'x-requested-with'
+]
 
+CORS_ALLOW_CREDENTIALS = True
+    
 AUTH_USER_MODEL = 'educando_ecommerce.Usuario'
